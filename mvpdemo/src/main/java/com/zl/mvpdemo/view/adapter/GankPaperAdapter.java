@@ -20,7 +20,6 @@ public class GankPaperAdapter extends FragmentPagerAdapter {
         super(fm);
         mFragmentList = fragments;
         mTitleList =new ArrayList<>();
-        mTitleList.add("福利");
         mTitleList.add("Android");
         mTitleList.add("IOS");
         mTitleList.add("视频");

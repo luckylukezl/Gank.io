@@ -18,6 +18,7 @@
 
     <TextView
         android:id="@+id/item_recycler_textView"
+        android:gravity="right"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

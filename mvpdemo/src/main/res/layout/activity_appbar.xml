@@ -14,69 +14,67 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <RelativeLayout
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_main"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_scrollFlags="scroll|enterAlways">
+                android:layout_height="?android:actionBarSize"
+                app:layout_scrollFlags="scroll|enterAlways"
+                >
 
-                <ImageView
-                    android:id="@+id/bar_info"
-                    android:layout_alignParentLeft="true"
-                    android:src="@android:drawable/ic_dialog_dialer"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="8dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+            </android.support.v7.widget.Toolbar>
 
-                <ImageView
-                    android:id="@+id/bar_logo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/bar_info"
-                    android:src="@mipmap/ic_launcher"/>
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--app:layout_scrollFlags="scroll|enterAlways">-->
 
-                <TextView
-                    android:text="未登陆"
-                    android:layout_toRightOf="@id/bar_logo"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="8dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView" />
+                <!--<ImageView-->
+                    <!--android:id="@+id/bar_info"-->
+                    <!--android:layout_alignParentLeft="true"-->
+                    <!--android:src="@android:drawable/ic_dialog_dialer"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_marginRight="8dp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <TextView
-                    android:text="今日推荐"
-                    android:layout_marginRight="8dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView3" />
+                <!--<ImageView-->
+                    <!--android:id="@+id/bar_logo"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_toRightOf="@id/bar_info"-->
+                    <!--android:src="@mipmap/ic_launcher"/>-->
+
+                <!--<TextView-->
+                    <!--android:text="未登陆"-->
+                    <!--android:layout_toRightOf="@id/bar_logo"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_marginLeft="8dp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:id="@+id/textView" />-->
+
+                <!--<TextView-->
+                    <!--android:text="今日推荐"-->
+                    <!--android:layout_marginRight="8dp"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:id="@+id/textView3" />-->
 
 
-            </RelativeLayout>
+            <!--</RelativeLayout>-->
 
         </android.support.design.widget.AppBarLayout>
 
         <LinearLayout
+            android:id="@+id/content_linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:orientation="vertical">
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/bar_tabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:tabGravity="center"
-                app:tabMode="fixed"/>
 
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/bar_viewPager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
 
         </LinearLayout>
 

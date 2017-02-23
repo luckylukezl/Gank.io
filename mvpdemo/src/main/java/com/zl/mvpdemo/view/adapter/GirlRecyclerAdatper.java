@@ -27,6 +27,7 @@ import com.zl.mvpdemo.model.impl.GirlPictureUrlModel;
 import com.zl.mvpdemo.view.activity.GirlPictureActivity;
 import com.zl.mvpdemo.view.widget.GirlImageView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Random;
 
@@ -71,7 +72,7 @@ public class GirlRecyclerAdatper extends RecyclerView.Adapter<GirlRecyclerAdatpe
         }
         //holder.mImageView.setPic(mList.get(position).getWidth() , mList.get(position).getHeight());
         //Log.i("zlTag",mList.get(position).getDesc() +  ",h1:" + mList.get(position).getHeight() + ",w1:" +mList.get(position).getWidth());
-        holder.mTextView.setText(mList.get(position).getDesc());
+        holder.mTextView.setText(new SimpleDateFormat("yyyy/MM/dd").format(mList.get(position).getPublishedAt()));
 
         //Log.i("zlTag",mList.get(position).getDesc() +  ",h:" + holder.mImageView.getHeight() + ",w:" +holder.mImageView.getWidth());
         holder.mImageView.setOnClickListener(new View.OnClickListener() {

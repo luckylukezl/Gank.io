@@ -1,23 +1,14 @@
 package com.zl.mvpdemo.view.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.zl.mvpdemo.R;
 import com.zl.mvpdemo.model.bean.GirlData;
-import com.zl.mvpdemo.model.constant.Constant;
 import com.zl.mvpdemo.presenter.impl.GirlPresentImpl;
 import com.zl.mvpdemo.presenter.presenter.IGirlPresenter;
 import com.zl.mvpdemo.view.adapter.GirlRecyclerAdatper;
@@ -48,8 +39,6 @@ public class GirlFragment extends BaseFragment implements IGirlView{
 
     private RecyclerRefreshListener mRefreshListener;
 
-    // 标志位，标志已经初始化完成。
-    private boolean isPrepared;
 
     @Override
     public int getContentViewId() {
@@ -70,17 +59,9 @@ public class GirlFragment extends BaseFragment implements IGirlView{
         mGirlPresenter.init();
 
         iniView();
-        isPrepared = true;
-        lazyLoad();
-    }
-
-    @Override
-    protected void lazyLoad() {
-        if(!isPrepared || !isVisible) {
-            return;
-        }
         initData();
     }
+
 
     private void iniView() {
 

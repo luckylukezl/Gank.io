@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.zl.mvpdemo.R;
 import com.zl.mvpdemo.model.bean.GankData;
 import com.zl.mvpdemo.view.activity.GirlPictureActivity;
+import com.zl.mvpdemo.view.activity.WebViewActivity;
 import com.zl.mvpdemo.view.util.StringStyles;
 import com.zl.mvpdemo.view.widget.GirlImageView;
 
@@ -49,7 +50,7 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
 
     @Override
     public void onBindViewHolder(GankViewHolder holder, int position) {
-        GankData gankData = mList.get(position);
+        final GankData gankData = mList.get(position);
         List<String> images = gankData.getImages();
 
         String date = new SimpleDateFormat("yyyy-MM-dd").format(gankData.getPublishedAt());
@@ -60,6 +61,15 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
         builder.append(StringStyles.format(mContext," (via." + gankData.getWho() + ") ", R.style.ViaTextAppearance));
 
         holder.gankItemTextView.setText(builder.subSequence(0,builder.length()));
+        holder.gankItemTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext , WebViewActivity.class);
+                intent.putExtra(WebViewActivity.EXTRA_URL , gankData.getUrl());
+                intent.putExtra(WebViewActivity.EXTRA_TITLE,gankData.getDesc());
+                mContext.startActivity(intent);
+            }
+        });
 
         if(images!=null){
             holder.linearLayout_gank_item.setVisibility(View.VISIBLE);

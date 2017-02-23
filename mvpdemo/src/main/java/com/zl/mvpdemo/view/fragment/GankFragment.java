@@ -5,7 +5,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 
 import com.zl.mvpdemo.R;
@@ -25,7 +24,7 @@ import butterknife.BindView;
  * Created by ZL on 2017/2/21.
  */
 
-public class GankFragment extends BaseFragment implements IView<List<GankData>> {
+public class GankFragment extends BaseLazyLoadFragment implements IView<List<GankData>> {
 
     public static final String ARGS_TYPE = "args_type";
 

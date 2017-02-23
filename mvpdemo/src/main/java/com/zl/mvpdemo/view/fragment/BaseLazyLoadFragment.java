@@ -12,10 +12,10 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by ZL on 2017/2/23.
+ * Created by ZL on 2017/2/22.
  */
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseLazyLoadFragment extends Fragment {
     public abstract int getContentViewId();
     protected Context mContext;
     protected View mRootView;
@@ -30,6 +30,28 @@ public abstract class BaseFragment extends Fragment {
         initAllMembersView(savedInstanceState);
         return mRootView;
     }
+
+    protected boolean isVisible;
+    /**
+     * 在这里实现Fragment数据的缓加载.
+     * @param isVisibleToUser
+     */
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(getUserVisibleHint()) {
+            isVisible = true;
+            onVisible();
+        } else {
+            isVisible = false;
+            onInvisible();
+        }
+    }
+    protected void onVisible(){
+        lazyLoad();
+    }
+    protected abstract void lazyLoad();
+    protected void onInvisible(){}
 
     protected abstract void initAllMembersView(Bundle savedInstanceState);
 

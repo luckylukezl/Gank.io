@@ -1,5 +1,7 @@
 package com.zl.mvpdemo.model.bean;
 
+import java.util.Date;
+
 /**
  * girl数据
  */
@@ -11,7 +13,7 @@ public class GirlData {
 
     private String desc;
 
-    private String publishedAt;
+    private Date publishedAt;
 
     private String source;
 
@@ -45,10 +47,10 @@ public class GirlData {
     public String getDesc(){
         return this.desc;
     }
-    public void setPublishedAt(String publishedAt){
+    public void setPublishedAt(Date publishedAt){
         this.publishedAt = publishedAt;
     }
-    public String getPublishedAt(){
+    public Date getPublishedAt(){
         return this.publishedAt;
     }
     public void setSource(String source){

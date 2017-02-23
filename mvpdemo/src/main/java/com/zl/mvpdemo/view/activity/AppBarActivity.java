@@ -4,18 +4,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 import com.zl.mvpdemo.R;
-import com.zl.mvpdemo.R2;
 import com.zl.mvpdemo.model.constant.Constant;
 import com.zl.mvpdemo.view.adapter.GankPaperAdapter;
 import com.zl.mvpdemo.view.fragment.GankFragment;
 import com.zl.mvpdemo.view.fragment.GirlFragment;
+import com.zl.mvpdemo.view.fragment.TabFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,20 +31,11 @@ import butterknife.ButterKnife;
  */
 
 public class AppBarActivity extends AppCompatActivity {
-
-
-    @BindView(R2.id.bar_info)
-    ImageView barInfo;
-    @BindView(R2.id.bar_logo)
-    ImageView barLogo;
-    @BindView(R2.id.textView)
-    TextView textView;
-    @BindView(R2.id.textView3)
-    TextView textView3;
-    @BindView(R.id.bar_tabLayout)
-    TabLayout barTabLayout;
-    @BindView(R.id.bar_viewPager)
-    ViewPager barViewPager;
+    
+    @BindView(R.id.toolbar_main)
+    Toolbar toolbarMain;
+    @BindView(R.id.content_linearLayout)
+    LinearLayout contentLinearLayout;
 
     private List<Fragment> mFragments;
     private GankPaperAdapter mPaperAdapter;
@@ -52,11 +46,11 @@ public class AppBarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appbar);
         ButterKnife.bind(this);
+
         init();
 
         initTab();
     }
-
 
 
     private void init() {
@@ -68,25 +62,40 @@ public class AppBarActivity extends AppCompatActivity {
         Constant.SCREEN_WIDTH = metrics.widthPixels;
         Constant.SCREEN_DENSITY = metrics.density;
 
+        toolbarMain.setTitle("未登录");
+        toolbarMain.setLogo(R.mipmap.ic_launcher);
+        setSupportActionBar(toolbarMain);
+
     }
 
     private void initTab() {
-        mFragments = new ArrayList<>();
-
-        mFragments.add(new GirlFragment());
-        mFragments.add(GankFragment.newInstance("Android"));
-        mFragments.add(GankFragment.newInstance("iOS"));
-        mFragments.add(GankFragment.newInstance("休息视频"));
-        mFragments.add(GankFragment.newInstance("拓展资源"));
-        mFragments.add(GankFragment.newInstance("前端"));
-
-
-        mPaperAdapter = new GankPaperAdapter(getSupportFragmentManager(),mFragments);
-        barViewPager.setAdapter(mPaperAdapter);
-        barViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(barTabLayout));
-
-        barTabLayout.setupWithViewPager(barViewPager);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.content_linearLayout,new TabFragment());
+        transaction.commit();
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_girl:
+
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.content_linearLayout,new GirlFragment());
+                transaction.commit();
+                break;
+            case R.id.action_home:
+
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

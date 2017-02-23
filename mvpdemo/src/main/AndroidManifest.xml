@@ -15,6 +15,9 @@
         <activity android:name=".view.activity.GirlPictureActivity"
             android:launchMode="singleTask"/>
 
+        <activity android:name=".view.activity.WebViewActivity"
+            android:launchMode="singleTask"/>
+
 
         <meta-data android:name="com.zl.mvpdemo.model.model.MyGlideModule"
             android:value="GlideModule"
