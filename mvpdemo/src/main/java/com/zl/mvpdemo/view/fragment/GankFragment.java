@@ -1,0 +1,152 @@
+package com.zl.mvpdemo.view.fragment;
+
+import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
+
+import com.zl.mvpdemo.R;
+import com.zl.mvpdemo.model.bean.GankData;
+import com.zl.mvpdemo.presenter.impl.GankPresenterImpl;
+import com.zl.mvpdemo.presenter.presenter.IGankPresenter;
+import com.zl.mvpdemo.view.adapter.GankRecyclerAdapter;
+import com.zl.mvpdemo.view.listener.RecyclerRefreshListener;
+import com.zl.mvpdemo.view.view.IView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+
+/**
+ * Created by ZL on 2017/2/21.
+ */
+
+public class GankFragment extends BaseFragment implements IView<List<GankData>> {
+
+    public static final String ARGS_TYPE = "args_type";
+
+    @BindView(R.id.gank_recyclerView)
+    RecyclerView gankRecyclerView;
+    @BindView(R.id.gank_SwipeRefresh)
+    SwipeRefreshLayout gankSwipeRefresh;
+
+    private IGankPresenter mPresenter;
+    private List<GankData> mGankDatas;
+    private GankRecyclerAdapter mGankAdapter;
+
+    private String mType;
+
+    private RecyclerRefreshListener mRefreshListener;
+
+    // 标志位，标志已经初始化完成。
+    private boolean isPrepared = false;
+
+    public static GankFragment newInstance(String type) {
+
+        Bundle args = new Bundle();
+        args.putString(ARGS_TYPE, type);
+        GankFragment fragment = new GankFragment();
+        fragment.setArguments(args);
+        return fragment;
+
+    }
+
+    @Override
+    public int getContentViewId() {
+        return R.layout.fragment_gank;
+    }
+
+    @Override
+    protected void lazyLoad() {
+        if (!isPrepared || !isVisible) {
+            return;
+        }
+        if(mGankDatas.size() == 0){
+            mPresenter.getData(mType, 1);
+        }
+
+    }
+
+    private void init(){
+        mType = getArguments().getString(ARGS_TYPE);
+
+        mGankDatas = new ArrayList<>();
+        mGankAdapter = new GankRecyclerAdapter(mGankDatas,mContext);
+
+        mPresenter = new GankPresenterImpl(this);
+
+        iniView();
+        isPrepared = true;
+        lazyLoad();
+    }
+
+    private void iniView() {
+
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
+        mRefreshListener = new RecyclerRefreshListener(layoutManager) {
+            @Override
+            public void onRefresh() {
+                if(!isLoading()){
+                    mGankDatas.clear();
+                    mPresenter.getData(mType,1);
+                    setCurrentPage(1);
+                }
+            }
+
+            @Override
+            public void onLoadMore(int currentPage) {
+                mPresenter.getData(mType ,currentPage);
+            }
+
+            @Override
+            public void onRefreshLayout() {
+                try{
+                    mGankAdapter.notifyDataSetChanged();
+                }catch (IllegalStateException e){
+                    //Log.i("zlTag",e.toString());
+                }
+
+            }
+        };
+
+        gankRecyclerView.setLayoutManager(layoutManager);
+        gankRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        gankRecyclerView.setAdapter(mGankAdapter);
+        gankRecyclerView.addOnScrollListener(mRefreshListener);
+
+        gankSwipeRefresh.setColorSchemeColors(getResources().getColor(R.color.colorBlue));
+        gankSwipeRefresh.setOnRefreshListener(mRefreshListener);
+
+    }
+
+    @Override
+    protected void initAllMembersView(Bundle savedInstanceState) {
+       init();
+    }
+
+    @Override
+    public void setData(List<GankData> gankDatas) {
+        mGankAdapter.addDataList(gankDatas);
+    }
+
+    @Override
+    public void showLoading() {
+        gankSwipeRefresh.setRefreshing(true);
+        mRefreshListener.onStart();
+    }
+
+    @Override
+    public void getDataCompleted() {
+        gankSwipeRefresh.setRefreshing(false);
+        mRefreshListener.onCompleted();
+    }
+
+    @Override
+    public void showError() {
+        Log.i("zlTag","error");
+    }
+}
