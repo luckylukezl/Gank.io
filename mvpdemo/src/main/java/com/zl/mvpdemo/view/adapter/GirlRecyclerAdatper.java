@@ -2,6 +2,8 @@ package com.zl.mvpdemo.view.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,11 +22,15 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.bumptech.glide.request.target.Target;
 import com.zl.mvpdemo.R;
+import com.zl.mvpdemo.model.bean.GankData;
 import com.zl.mvpdemo.model.bean.GirlData;
+import com.zl.mvpdemo.model.bean.GirlPicture;
 import com.zl.mvpdemo.model.constant.Constant;
 import com.zl.mvpdemo.model.impl.GirlLoader;
 import com.zl.mvpdemo.model.impl.GirlPictureUrlModel;
+import com.zl.mvpdemo.view.activity.GirlActivity;
 import com.zl.mvpdemo.view.activity.GirlPictureActivity;
+import com.zl.mvpdemo.view.listener.OnGirlTouchListener;
 import com.zl.mvpdemo.view.widget.GirlImageView;
 
 import java.text.SimpleDateFormat;
@@ -43,6 +49,8 @@ public class GirlRecyclerAdatper extends RecyclerView.Adapter<GirlRecyclerAdatpe
     private final int VERTICAL_TYPE = 0;
     private final int HORIZONTAL_TYPE = 1;
 
+    private OnGirlTouchListener mGirlTouchListener;
+
     public GirlRecyclerAdatper(List list, Context context){
         mList = list;
         mContext = context;
@@ -58,29 +66,31 @@ public class GirlRecyclerAdatper extends RecyclerView.Adapter<GirlRecyclerAdatpe
     //将数据与视图绑定
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-
+        final GirlData girlData = mList.get(position);
         int width = Constant.SCREEN_WIDTH / 2;
 
-        String url = mList.get(position).getUrl() + "?imageView2/0/w/" + width;
+        String url = girlData.getUrl() + "?imageView2/0/w/" + width;
 
         int limit = 84;
-
-        if(getItemViewType(position) == HORIZONTAL_TYPE){
-            holder.mImageView.setPic(1,1);
-        }else{
-            holder.mImageView.setPic(3,4);
-        }
+//
+//        if(getItemViewType(position) == HORIZONTAL_TYPE){
+//            holder.mImageView.setPic(1,1);
+//        }else{
+//            holder.mImageView.setPic(3,4);
+//        }
         //holder.mImageView.setPic(mList.get(position).getWidth() , mList.get(position).getHeight());
         //Log.i("zlTag",mList.get(position).getDesc() +  ",h1:" + mList.get(position).getHeight() + ",w1:" +mList.get(position).getWidth());
-        holder.mTextView.setText(new SimpleDateFormat("yyyy/MM/dd").format(mList.get(position).getPublishedAt()));
+        holder.mTextView.setText(new SimpleDateFormat("yyyy/MM/dd").format(girlData.getPublishedAt()));
 
         //Log.i("zlTag",mList.get(position).getDesc() +  ",h:" + holder.mImageView.getHeight() + ",w:" +holder.mImageView.getWidth());
         holder.mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext , GirlPictureActivity.class);
-                intent.putExtra(GirlPictureActivity.EXTRA_URL , mList.get(position).getUrl());
-                mContext.startActivity(intent);
+                if(mGirlTouchListener!=null){
+                    mGirlTouchListener.onTouch(girlData,holder.mImageView);
+
+                }
+
             }
         });
 
@@ -96,16 +106,20 @@ public class GirlRecyclerAdatper extends RecyclerView.Adapter<GirlRecyclerAdatpe
                 .into(holder.mImageView);
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        GirlData image = mList.get(position);
-        if(image.getWidth() >= image.getHeight()){
-            return HORIZONTAL_TYPE;
-        }else{
-            return VERTICAL_TYPE;
-        }
-        //return Math.round((float) image.getWidth() / (float) image.getHeight() * 10f);
+    public void setGirlTouchListener(OnGirlTouchListener listener){
+        mGirlTouchListener = listener;
     }
+
+//    @Override
+//    public int getItemViewType(int position) {
+//        GirlData image = mList.get(position);
+//        if(image.getWidth() >= image.getHeight()){
+//            return HORIZONTAL_TYPE;
+//        }else{
+//            return VERTICAL_TYPE;
+//        }
+//        //return Math.round((float) image.getWidth() / (float) image.getHeight() * 10f);
+//    }
 
     @Override
     public int getItemCount() {
@@ -138,9 +152,8 @@ public class GirlRecyclerAdatper extends RecyclerView.Adapter<GirlRecyclerAdatpe
             mItemView = itemView;
             //mItemView.setTag(this);
             mImageView = (GirlImageView) itemView.findViewById(R.id.item_recycler_imageView);
-
             mTextView = (TextView) itemView.findViewById(R.id.item_recycler_textView);
-            //mImageView.setPic(50,50);
+            mImageView.setPic(50,50);
         }
 
     }

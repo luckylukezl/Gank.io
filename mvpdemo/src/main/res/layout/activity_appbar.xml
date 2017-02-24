@@ -23,48 +23,6 @@
 
             </android.support.v7.widget.Toolbar>
 
-            <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--app:layout_scrollFlags="scroll|enterAlways">-->
-
-                <!--<ImageView-->
-                    <!--android:id="@+id/bar_info"-->
-                    <!--android:layout_alignParentLeft="true"-->
-                    <!--android:src="@android:drawable/ic_dialog_dialer"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:layout_marginRight="8dp"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content" />-->
-
-                <!--<ImageView-->
-                    <!--android:id="@+id/bar_logo"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_toRightOf="@id/bar_info"-->
-                    <!--android:src="@mipmap/ic_launcher"/>-->
-
-                <!--<TextView-->
-                    <!--android:text="未登陆"-->
-                    <!--android:layout_toRightOf="@id/bar_logo"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:layout_marginLeft="8dp"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:id="@+id/textView" />-->
-
-                <!--<TextView-->
-                    <!--android:text="今日推荐"-->
-                    <!--android:layout_marginRight="8dp"-->
-                    <!--android:layout_alignParentRight="true"-->
-                    <!--android:layout_centerVertical="true"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:id="@+id/textView3" />-->
-
-
-            <!--</RelativeLayout>-->
-
         </android.support.design.widget.AppBarLayout>
 
         <LinearLayout
@@ -73,8 +31,6 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:orientation="vertical">
-
-
 
         </LinearLayout>
 

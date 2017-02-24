@@ -2,6 +2,7 @@ package com.zl.mvpdemo.model.impl;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.FutureTarget;
@@ -94,7 +95,7 @@ public class IGirlImpl implements IGirlModel {
                     @Override
                     public void onNext(List<GirlData> girlDatas) {
                         listener.onSuccess(girlDatas);
-                        //Log.i("zlTag",girlData.getDesc());
+                        Log.i("zlTag","size" + girlDatas.size());
                     }
 
                 });

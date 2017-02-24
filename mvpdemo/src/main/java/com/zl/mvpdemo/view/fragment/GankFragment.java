@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.zl.mvpdemo.R;
 import com.zl.mvpdemo.model.bean.GankData;
+import com.zl.mvpdemo.model.bean.GirlData;
 import com.zl.mvpdemo.presenter.impl.GankPresenterImpl;
 import com.zl.mvpdemo.presenter.presenter.IGankPresenter;
 import com.zl.mvpdemo.view.adapter.GankRecyclerAdapter;
@@ -35,6 +36,7 @@ public class GankFragment extends BaseLazyLoadFragment implements IView<List<Gan
 
     private IGankPresenter mPresenter;
     private List<GankData> mGankDatas;
+    private List<GankData> mNewDatas;
     private GankRecyclerAdapter mGankAdapter;
 
     private String mType;
@@ -65,6 +67,7 @@ public class GankFragment extends BaseLazyLoadFragment implements IView<List<Gan
             return;
         }
         if(mGankDatas.size() == 0){
+            Log.i("zlTag","lazy");
             mPresenter.getData(mType, 1);
         }
 
@@ -74,6 +77,7 @@ public class GankFragment extends BaseLazyLoadFragment implements IView<List<Gan
         mType = getArguments().getString(ARGS_TYPE);
 
         mGankDatas = new ArrayList<>();
+        mNewDatas = new ArrayList<>();
         mGankAdapter = new GankRecyclerAdapter(mGankDatas,mContext);
 
         mPresenter = new GankPresenterImpl(this);
@@ -91,25 +95,26 @@ public class GankFragment extends BaseLazyLoadFragment implements IView<List<Gan
             public void onRefresh() {
                 if(!isLoading()){
                     mGankDatas.clear();
-                    mPresenter.getData(mType,1);
+                    Log.i("zlTag","refresh");
+                    getDate(1);
                     setCurrentPage(1);
                 }
             }
 
             @Override
-            public void onLoadMore(int currentPage) {
-                mPresenter.getData(mType ,currentPage);
+            public void onDateChanged() {
+                if(mNewDatas.size() > 0){
+                    addDate(mNewDatas);
+                    mNewDatas.clear();
+                }
             }
 
             @Override
-            public void onRefreshLayout() {
-                try{
-                    mGankAdapter.notifyDataSetChanged();
-                }catch (IllegalStateException e){
-                    //Log.i("zlTag",e.toString());
-                }
-
+            public void onLoadMore(int currentPage) {
+                Log.i("zlTag","onLoadMore");
+                getDate(currentPage);
             }
+
         };
 
         gankRecyclerView.setLayoutManager(layoutManager);
@@ -122,6 +127,15 @@ public class GankFragment extends BaseLazyLoadFragment implements IView<List<Gan
 
     }
 
+    public void getDate(int page){
+        mPresenter.getData(mType,page);
+        mRefreshListener.setUpdated(false);
+    }
+
+    public void addDate(List<GankData> gankDatas){
+        mGankAdapter.addDataList(gankDatas);
+    }
+
     @Override
     protected void initAllMembersView(Bundle savedInstanceState) {
        init();
@@ -129,11 +143,18 @@ public class GankFragment extends BaseLazyLoadFragment implements IView<List<Gan
 
     @Override
     public void setData(List<GankData> gankDatas) {
-        mGankAdapter.addDataList(gankDatas);
+        if(mRefreshListener.getIsScrolling()){
+            mNewDatas.addAll(gankDatas);
+        }else {
+            addDate(gankDatas);
+            mRefreshListener.setUpdated(true);
+        }
+
     }
 
     @Override
     public void showLoading() {
+        Log.i("zlTag","load:" + mRefreshListener.isLoading());
         gankSwipeRefresh.setRefreshing(true);
         mRefreshListener.onStart();
     }

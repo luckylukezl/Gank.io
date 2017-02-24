@@ -17,6 +17,11 @@
         <item name="android:textColor">@color/md_grey_400</item>
     </style>
 
+    <style name="UrlTextAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="DateTextAppearance">
         <item name="android:textColor">@color/colorAccent</item>
     </style>

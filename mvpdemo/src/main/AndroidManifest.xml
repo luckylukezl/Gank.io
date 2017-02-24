@@ -12,6 +12,10 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".view.activity.GirlActivity"/>
+
+        <activity android:name=".view.activity.GifActivity"/>
+
         <activity android:name=".view.activity.GirlPictureActivity"
             android:launchMode="singleTask"/>
 

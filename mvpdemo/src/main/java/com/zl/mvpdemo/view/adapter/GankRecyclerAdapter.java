@@ -15,12 +15,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.zl.mvpdemo.R;
 import com.zl.mvpdemo.model.bean.GankData;
+import com.zl.mvpdemo.model.constant.Constant;
+import com.zl.mvpdemo.view.activity.GifActivity;
 import com.zl.mvpdemo.view.activity.GirlPictureActivity;
 import com.zl.mvpdemo.view.activity.WebViewActivity;
 import com.zl.mvpdemo.view.util.StringStyles;
 import com.zl.mvpdemo.view.widget.GirlImageView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -57,7 +60,7 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
 
         SpannableStringBuilder builder = new SpannableStringBuilder();
         builder.append(StringStyles.format(mContext,date + "\n", R.style.DateTextAppearance));
-        builder.append(gankData.getDesc());
+        builder.append(StringStyles.format(mContext,gankData.getDesc(),R.style.UrlTextAppearance));
         builder.append(StringStyles.format(mContext," (via." + gankData.getWho() + ") ", R.style.ViaTextAppearance));
 
         holder.gankItemTextView.setText(builder.subSequence(0,builder.length()));
@@ -75,16 +78,16 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
             holder.linearLayout_gank_item.setVisibility(View.VISIBLE);
             int i=0;
             holder.imageView1GankItem.setVisibility(View.VISIBLE);
-            loadImageView(images.get(i),holder.imageView1GankItem);
+            loadImageView(images , i ,holder.imageView1GankItem);
             i++;
             if(i < images.size()){
                 holder.imageView2GankItem.setVisibility(View.VISIBLE);
-                loadImageView(images.get(i),holder.imageView2GankItem);
+                loadImageView(images , i ,holder.imageView2GankItem);
             }
             i++;
             if(i < images.size()){
                 holder.imageView3GankItem.setVisibility(View.VISIBLE);
-                loadImageView(images.get(i),holder.imageView3GankItem);
+                loadImageView(images , i ,holder.imageView3GankItem);
             }
         }else {
             holder.linearLayout_gank_item.setVisibility(View.GONE);
@@ -92,9 +95,10 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
 
     }
 
-    public void loadImageView(final String url , ImageView view){
+    public void loadImageView(final List<String> images , final int i , ImageView view){
+
         Glide.with(mContext)
-                .load(url)
+                .load(images.get(i) + "?imageView2/0/w/" + Constant.SCREEN_WIDTH / 3)
                 .asBitmap()
                 .error(R.mipmap.material_img)
                 //.placeholder(R.mipmap.material_img)
@@ -105,9 +109,10 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(mContext , GirlPictureActivity.class);
-//                intent.putExtra(GirlPictureActivity.EXTRA_URL , url);
-//                mContext.startActivity(intent);
+                Intent intent = new Intent(mContext , GifActivity.class);
+                intent.putExtra(GifActivity.EXTRA_LIST,new ArrayList<>(images));
+                intent.putExtra(GifActivity.EXTRA_PAGE,i);
+                mContext.startActivity(intent);
             }
         });
     }

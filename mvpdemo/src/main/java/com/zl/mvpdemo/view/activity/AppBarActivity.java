@@ -1,5 +1,6 @@
 package com.zl.mvpdemo.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -86,9 +87,8 @@ public class AppBarActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_girl:
 
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.content_linearLayout,new GirlFragment());
-                transaction.commit();
+                Intent intent = new Intent(this,GirlActivity.class);
+                startActivity(intent);
                 break;
             case R.id.action_home:
 
