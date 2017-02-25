@@ -10,5 +10,5 @@ import com.zl.mvpdemo.model.bean.GirlData;
  */
 
 public interface OnGirlTouchListener {
-    void onTouch(GirlData girlData, View view);
+    void onTouch(GirlData girlData, View view , int position);
 }

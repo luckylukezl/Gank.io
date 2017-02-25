@@ -38,10 +38,16 @@ public class IGirlImpl implements IGirlModel {
     @Override
     public void getGirls(final OnGirlListener listener , int page) {
 
+        getGirls(listener , 10 , page);
+
+    }
+
+    @Override
+    public void getGirls(final OnGirlListener listener, int count, int page) {
         GankRetrofit retrofit = GankRetrofit.getGankRetrofit();
 
         IGankioService service = retrofit.getService();
-        Observable<GankInfo<List<GirlData>>> observable = service.getGirls(10,page);
+        Observable<GankInfo<List<GirlData>>> observable = service.getGirls(count,page);
 
         observable.map(new GirlDataFunc<List<GirlData>>())
                 .subscribeOn(Schedulers.io())
@@ -99,9 +105,7 @@ public class IGirlImpl implements IGirlModel {
                     }
 
                 });
-
     }
-
 
 
 }

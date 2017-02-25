@@ -1,10 +1,13 @@
 package com.zl.mvpdemo.model.service;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
+import com.zl.mvpdemo.MyApplication;
+import com.zl.mvpdemo.model.impl.CacheInterceptor;
+
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -18,13 +21,24 @@ public class GankRetrofit {
 
     private String mUrl = "http://gank.io/api/data/";
 
-    private static final int DEFAULT_TIMEOUT = 10;
+    private static final int DEFAULT_TIMEOUT = 5;
 
     private IGankioService mService;
 
+    //缓存路径
+    private File mCacheFile;
+    private Cache mCache ;
+
+
     private GankRetrofit(){
-        OkHttpClient.Builder client = new OkHttpClient.Builder();
-        client.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+        mCacheFile = new File(MyApplication.getAppContext().getCacheDir().getAbsolutePath(), "HttpCache");
+        mCache = new Cache(mCacheFile, 1024 * 1024 * 10);//缓存文件为10MB
+
+        OkHttpClient.Builder client =
+                new OkHttpClient.Builder()
+                .addInterceptor(new CacheInterceptor())
+                .cache(mCache)
+                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client.build())

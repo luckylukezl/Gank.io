@@ -68,7 +68,7 @@ public class GankFragment extends BaseLazyLoadFragment implements IView<List<Gan
         }
         if(mGankDatas.size() == 0){
             Log.i("zlTag","lazy");
-            mPresenter.getData(mType, 1);
+            getDate(1);
         }
 
     }
@@ -134,6 +134,7 @@ public class GankFragment extends BaseLazyLoadFragment implements IView<List<Gan
 
     public void addDate(List<GankData> gankDatas){
         mGankAdapter.addDataList(gankDatas);
+        mRefreshListener.setUpdated(true);
     }
 
     @Override
@@ -147,7 +148,6 @@ public class GankFragment extends BaseLazyLoadFragment implements IView<List<Gan
             mNewDatas.addAll(gankDatas);
         }else {
             addDate(gankDatas);
-            mRefreshListener.setUpdated(true);
         }
 
     }

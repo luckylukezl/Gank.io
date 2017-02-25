@@ -132,16 +132,21 @@ public class GirlFragment extends BaseFragment implements IGirlView{
     private OnGirlTouchListener getOnGirlTouchListener() {
         return new OnGirlTouchListener() {
             @Override
-            public void onTouch(final GirlData girlData, final View view) {
+            public void onTouch(final GirlData girlData, final View view , int position) {
                 if (girlData == null) return;
-                startPictureActivity(girlData, view);
+                startPictureActivity(mGirlUrl, view , position);
             }
         };
     }
 
-    private void startPictureActivity(GirlData girlData, View transitView) {
+    private void startPictureActivity(List<GirlData> girlDatas, View transitView , int position) {
+        ArrayList<String> images = new ArrayList<>();
+        for(GirlData data : girlDatas){
+            images.add(data.getUrl());
+        }
         Intent intent = new Intent(mContext , GirlPictureActivity.class);
-        intent.putExtra(GirlPictureActivity.EXTRA_URL , girlData.getUrl());
+        intent.putStringArrayListExtra(GirlPictureActivity.EXTRA_GIRLS , images);
+        intent.putExtra(GirlPictureActivity.EXTRA_POSITION , position);
         ActivityOptionsCompat compat = ActivityOptionsCompat.makeScaleUpAnimation(transitView,
                 transitView.getWidth() / 2, transitView.getHeight() / 2, 0, 0);
         ActivityCompat.startActivity(getActivity(), intent, compat.toBundle());

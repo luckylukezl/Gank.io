@@ -83,11 +83,15 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
             if(i < images.size()){
                 holder.imageView2GankItem.setVisibility(View.VISIBLE);
                 loadImageView(images , i ,holder.imageView2GankItem);
+            }else {
+                holder.imageView2GankItem.setVisibility(View.INVISIBLE);
             }
             i++;
             if(i < images.size()){
                 holder.imageView3GankItem.setVisibility(View.VISIBLE);
                 loadImageView(images , i ,holder.imageView3GankItem);
+            }else {
+                holder.imageView3GankItem.setVisibility(View.INVISIBLE);
             }
         }else {
             holder.linearLayout_gank_item.setVisibility(View.GONE);
@@ -103,7 +107,7 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
                 .error(R.mipmap.material_img)
                 //.placeholder(R.mipmap.material_img)
                 //.centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(view);
 
         view.setOnClickListener(new View.OnClickListener() {

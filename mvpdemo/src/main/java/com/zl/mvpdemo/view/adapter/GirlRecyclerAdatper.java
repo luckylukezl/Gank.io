@@ -87,7 +87,7 @@ public class GirlRecyclerAdatper extends RecyclerView.Adapter<GirlRecyclerAdatpe
             @Override
             public void onClick(View v) {
                 if(mGirlTouchListener!=null){
-                    mGirlTouchListener.onTouch(girlData,holder.mImageView);
+                    mGirlTouchListener.onTouch(girlData,holder.mImageView,position);
 
                 }
 
