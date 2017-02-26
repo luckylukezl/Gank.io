@@ -116,6 +116,7 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
                 Intent intent = new Intent(mContext , GifActivity.class);
                 intent.putExtra(GifActivity.EXTRA_LIST,new ArrayList<>(images));
                 intent.putExtra(GifActivity.EXTRA_PAGE,i);
+                intent.putExtra(GifActivity.EXTRA_DESC,mList.get(i).getDesc());
                 mContext.startActivity(intent);
             }
         });

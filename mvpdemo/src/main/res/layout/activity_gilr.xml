@@ -41,7 +41,8 @@
             app:elevation="6dp"
             app:borderWidth="0dp"
             app:backgroundTint="#5a79a7"
-            android:id="@+id/floatingActionButton" />
+            android:id="@+id/floatingActionButton"
+            android:visibility="gone"/>
 
 
 

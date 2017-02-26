@@ -6,5 +6,6 @@ package com.zl.mvpdemo.presenter.presenter;
 
 public interface IGirlPresenter {
     void getGirls(int page);
+    void getGirlsFromLoc(int page);
     void init();
 }

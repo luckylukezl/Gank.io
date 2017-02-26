@@ -10,14 +10,17 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.orhanobut.logger.Logger;
 import com.zl.mvpdemo.R;
 import com.zl.mvpdemo.model.bean.GirlData;
+import com.zl.mvpdemo.model.bean.GirlPicture;
 import com.zl.mvpdemo.presenter.impl.GirlPresentImpl;
 import com.zl.mvpdemo.presenter.presenter.IGirlPresenter;
 import com.zl.mvpdemo.view.activity.GirlPictureActivity;
@@ -37,6 +40,8 @@ import butterknife.BindView;
 
 public class GirlFragment extends BaseFragment implements IGirlView{
 
+    public static final String ARG_SAVE = "isSave";
+
     @BindView(R.id.girl_recyclerView)
     RecyclerView mGirlRecyclerView;
     @BindView(R.id.girl_SwipeRefresh)
@@ -51,6 +56,16 @@ public class GirlFragment extends BaseFragment implements IGirlView{
 
     private RecyclerRefreshListener mRefreshListener;
 
+    private boolean isSavedPicture = false;
+
+    public static GirlFragment newInstance(boolean isSave){
+
+        Bundle args = new Bundle();
+        args.putBoolean(ARG_SAVE,isSave);
+        GirlFragment fragment = new GirlFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public int getContentViewId() {
@@ -72,6 +87,9 @@ public class GirlFragment extends BaseFragment implements IGirlView{
 
         mGirlPresenter.init();
 
+        isSavedPicture = getArguments().getBoolean(ARG_SAVE);
+        mGirlAdapter.setSavePicture(isSavedPicture);
+
         iniView();
         initData();
     }
@@ -88,9 +106,8 @@ public class GirlFragment extends BaseFragment implements IGirlView{
             @Override
             public void onRefresh() {
                 if(!isLoading()){
-                    mGirlUrl.clear();
-                    mGirlPresenter.getGirls(1);
-                    setCurrentPage(1);
+                    getData(1);
+
                 }
             }
 
@@ -105,7 +122,7 @@ public class GirlFragment extends BaseFragment implements IGirlView{
 
             @Override
             public void onLoadMore(int currentPage) {
-                mGirlPresenter.getGirls(currentPage);
+                getData(currentPage);
             }
 
         };
@@ -122,11 +139,28 @@ public class GirlFragment extends BaseFragment implements IGirlView{
 
     }
 
+    public void updateDate(){
+        getData(1);
+    }
 
     private void initData() {
         if(mGirlUrl.size() == 0){
-            mGirlPresenter.getGirls(1);
+            getData(1);
         }
+    }
+
+    public void getData(int page){
+        if(page == 1){
+            mGirlUrl.clear();
+        }
+        mRefreshListener.setCurrentPage(page);
+        if(isSavedPicture){
+            mGirlPresenter.getGirlsFromLoc(page);
+        }else {
+            mGirlPresenter.getGirls(page);
+        }
+
+
     }
 
     private OnGirlTouchListener getOnGirlTouchListener() {
@@ -147,11 +181,31 @@ public class GirlFragment extends BaseFragment implements IGirlView{
         Intent intent = new Intent(mContext , GirlPictureActivity.class);
         intent.putStringArrayListExtra(GirlPictureActivity.EXTRA_GIRLS , images);
         intent.putExtra(GirlPictureActivity.EXTRA_POSITION , position);
+        intent.putExtra(GirlPictureActivity.EXTRA_ISSAVE,isSavedPicture);
         ActivityOptionsCompat compat = ActivityOptionsCompat.makeScaleUpAnimation(transitView,
                 transitView.getWidth() / 2, transitView.getHeight() / 2, 0, 0);
-        ActivityCompat.startActivity(getActivity(), intent, compat.toBundle());
+        ActivityCompat.startActivityForResult(getActivity(), intent, 1 , compat.toBundle());
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == 100){
+            ArrayList<String> urls = data.getStringArrayListExtra(GirlPictureActivity.EXTRA_RESULT);
+            Log.i("zlTag", urls == null?"yes" : "no");
+            Logger.d(urls);
+            if(urls==null)return;
+            for(String s:urls){
+                for(int i=mGirlUrl.size() - 1;i>=0;i--){
+                    if(mGirlUrl.get(i).getUrl().equals(s)){
+                        mGirlUrl.remove(i);
+                    }
+                }
+            }
+            mGirlAdapter.notifyDataSetChanged();
+        }
+    }
 
     @Override
     public void setGirlInfo(List<GirlData> datas) {

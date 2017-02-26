@@ -16,8 +16,7 @@
 
         <activity android:name=".view.activity.GifActivity"/>
 
-        <activity android:name=".view.activity.GirlPictureActivity"
-            android:launchMode="singleTask"/>
+        <activity android:name=".view.activity.GirlPictureActivity" />
 
         <activity android:name=".view.activity.WebViewActivity"
             android:launchMode="singleTask"/>

@@ -19,6 +19,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.zl.mvpdemo.R;
+import com.zl.mvpdemo.model.constant.Constant;
 
 import java.util.List;
 
@@ -35,6 +36,8 @@ public class ViewPageAdapter extends PagerAdapter {
     private List<String> images;
     private SparseArray<View> cacheView;
     private ViewGroup containerTemp;
+
+    private boolean isDateChanged = false;
 
     private PhotoViewAttacher.OnViewTapListener mOnViewTapListener;
 
@@ -60,6 +63,7 @@ public class ViewPageAdapter extends PagerAdapter {
                     .load(images.get(position))
                     .thumbnail((float) 0.3)
                     .error(R.mipmap.material_img)
+                    //.centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .listener(new RequestListener<String, GlideDrawable>() {
                         @Override
@@ -96,6 +100,20 @@ public class ViewPageAdapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
         View view = (View) object;
         container.removeView(view);
+    }
+
+    public void notifyDataSetChanged(int position) {
+        isDateChanged = true;
+        this.notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        if ( isDateChanged ) {
+            isDateChanged = false;
+            return POSITION_NONE;
+        }
+        return super.getItemPosition(object);
     }
 
     public void setOnTapListener(PhotoViewAttacher.OnViewTapListener listener){

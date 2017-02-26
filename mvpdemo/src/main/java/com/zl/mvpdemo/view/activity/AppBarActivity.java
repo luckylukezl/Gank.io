@@ -97,7 +97,17 @@ public class AppBarActivity extends AppCompatActivity implements IView<GirlData>
 
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
+                        switch (menuItem.getItemId()){
+                            case R.id.collect_drawer:
+
+                                break;
+                            case R.id.love_drawer:
+                                Intent intent = new Intent(AppBarActivity.this , GirlActivity.class);
+                                intent.putExtra(GirlActivity.EXTRA_ISSAVE,true);
+                                startActivity(intent);
+                                break;
+                        }
+                        menuItem.setCheckable(false);
                         drawerAppBar.closeDrawers();
                         return true;
                     }

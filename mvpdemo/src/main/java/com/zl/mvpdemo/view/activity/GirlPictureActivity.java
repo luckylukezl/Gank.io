@@ -7,19 +7,15 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-import com.orhanobut.logger.Logger;
 import com.zl.mvpdemo.R;
 import com.zl.mvpdemo.presenter.impl.ManagerPresenter;
 import com.zl.mvpdemo.presenter.presenter.IManagerPresenter;
@@ -28,6 +24,7 @@ import com.zl.mvpdemo.view.view.IView;
 import com.zl.mvpdemo.view.widget.ViewPagerFixed;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -39,11 +36,12 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  * Created by ZL on 2017/2/20.
  */
 
-public class GirlPictureActivity extends AppCompatActivity implements IView<String> , ViewPager.OnPageChangeListener {
+public class GirlPictureActivity extends AppCompatActivity implements IView<String>, ViewPager.OnPageChangeListener {
 
-    public static String EXTRA_URL = "URL";
+    public static String EXTRA_ISSAVE = "isSave";
     public static final String EXTRA_GIRLS = "girls";
     public static final String EXTRA_POSITION = "position";
+    public static final String EXTRA_RESULT = "result";
 
     //    @BindView(R.id.picture_imageView)
 //    ImageView pictureImageView;
@@ -57,6 +55,10 @@ public class GirlPictureActivity extends AppCompatActivity implements IView<Stri
     Toolbar toolbarView;
     @BindView(R.id.viewPager_picture_activity)
     ViewPagerFixed viewPagerPicture;
+    @BindView(R.id.save_delete_text)
+    TextView saveDeleteText;
+    @BindView(R.id.imageview_save_delete)
+    ImageView imageviewSaveDelete;
 
     //private String mUrl;
     private List<String> mImages;
@@ -66,6 +68,9 @@ public class GirlPictureActivity extends AppCompatActivity implements IView<Stri
     private IManagerPresenter mPresenter;
 
     private ViewPageAdapter mPageAdapter;
+
+    private boolean isSavedPicture = false;
+    private ArrayList<String> mResults;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +85,7 @@ public class GirlPictureActivity extends AppCompatActivity implements IView<Stri
         toolbarView.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                goBack();
             }
         });
 
@@ -88,33 +93,20 @@ public class GirlPictureActivity extends AppCompatActivity implements IView<Stri
 
         initView();
 
-//        Glide.with(this)
-//                .load(mUrl)
-//                .thumbnail((float) 0.3)
-//                .error(R.mipmap.material_img)
-//                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-//                .listener(new RequestListener<String, GlideDrawable>() {
-//                    @Override
-//                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-//                        return false;
-//                    }
-//
-//                    @Override
-//                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-//                        mPhotoAttacher.update();
-//                        return false;
-//                    }
-//                })
-//                .into(pictureImageView);
     }
 
     private void initView() {
 
-//        mUrl = getIntent().getStringExtra(EXTRA_URL);
-        mImages = getIntent().getStringArrayListExtra(EXTRA_GIRLS);
-        mPosition = getIntent().getIntExtra(EXTRA_POSITION , 0);
+        mResults = new ArrayList<>();
 
-        mPageAdapter = new ViewPageAdapter(this,mImages);
+        mImages = getIntent().getStringArrayListExtra(EXTRA_GIRLS);
+        mPosition = getIntent().getIntExtra(EXTRA_POSITION, 0);
+        isSavedPicture = getIntent().getBooleanExtra(EXTRA_ISSAVE, false);
+
+        saveDeleteText.setText(isSavedPicture ? "删除" : "保存");
+        imageviewSaveDelete.setImageResource(isSavedPicture ?android.R.drawable.ic_menu_delete : android.R.drawable.star_big_off);
+
+        mPageAdapter = new ViewPageAdapter(this, mImages);
         mPageAdapter.setOnTapListener(new PhotoViewAttacher.OnViewTapListener() {
             @Override
             public void onViewTap(View view, float x, float y) {
@@ -133,13 +125,17 @@ public class GirlPictureActivity extends AppCompatActivity implements IView<Stri
 //            }
 //        });
 
-
     }
 
 
     @OnClick(R.id.imageView_save_picture)
-    public void saveImageToGallery() {
-        mPresenter.save(mImages.get(mPosition));
+    public void saveOrDeleteImageToGallery() {
+        if (isSavedPicture) { //如果是加载的save的图片，则是删除按钮
+            mPresenter.delete(mImages.get(mPosition));
+        } else {
+            mPresenter.save(mImages.get(mPosition));
+        }
+
     }
 
     @OnClick(R.id.image_share_picture)
@@ -171,11 +167,40 @@ public class GirlPictureActivity extends AppCompatActivity implements IView<Stri
 
     @Override
     public void setData(String s) {
+        if (s.equals("delete")) {
+            setResult(100);
+            mResults.add(mImages.get(mPosition));
+            mImages.remove(mPosition);
+            if(mImages.size() == 0){
+                goBack();
+
+            }
+            if(mImages.size() == mPosition){
+                mPosition -= 1;
+            }
+            mPageAdapter = new ViewPageAdapter(this,mImages);
+            mPageAdapter.setOnTapListener(new PhotoViewAttacher.OnViewTapListener() {
+                @Override
+                public void onViewTap(View view, float x, float y) {
+                    hideOrShowToolbar();
+                }
+            });
+            viewPagerPicture.setAdapter(mPageAdapter);
+            viewPagerPicture.setCurrentItem(mPosition);
+            return;
+        }
         if (s.contains("share")) {
             startShare(s);
         } else {
             Toast.makeText(GirlPictureActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void goBack(){
+        Intent intent = new Intent();
+        intent.putStringArrayListExtra(EXTRA_RESULT,mResults);
+        setResult(100,intent);
+        finish();
     }
 
     @Override
@@ -201,6 +226,7 @@ public class GirlPictureActivity extends AppCompatActivity implements IView<Stri
     @Override
     public void onPageSelected(int position) {
         mPosition = position;
+        Log.i("zltag", "p:" + mPosition + "");
     }
 
     @Override

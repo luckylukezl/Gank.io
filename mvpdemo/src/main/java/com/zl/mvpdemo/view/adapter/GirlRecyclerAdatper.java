@@ -50,6 +50,7 @@ public class GirlRecyclerAdatper extends RecyclerView.Adapter<GirlRecyclerAdatpe
     private final int HORIZONTAL_TYPE = 1;
 
     private OnGirlTouchListener mGirlTouchListener;
+    private boolean isSavePicture = false;
 
     public GirlRecyclerAdatper(List list, Context context){
         mList = list;
@@ -69,18 +70,9 @@ public class GirlRecyclerAdatper extends RecyclerView.Adapter<GirlRecyclerAdatpe
         final GirlData girlData = mList.get(position);
         int width = Constant.SCREEN_WIDTH / 2;
 
-        String url = girlData.getUrl() + "?imageView2/0/w/" + width;
+        String url = girlData.getUrl() + ( isSavePicture?"":"?imageView2/0/w/" + width );
 
-        int limit = 84;
-//
-//        if(getItemViewType(position) == HORIZONTAL_TYPE){
-//            holder.mImageView.setPic(1,1);
-//        }else{
-//            holder.mImageView.setPic(3,4);
-//        }
-        //holder.mImageView.setPic(mList.get(position).getWidth() , mList.get(position).getHeight());
-        //Log.i("zlTag",mList.get(position).getDesc() +  ",h1:" + mList.get(position).getHeight() + ",w1:" +mList.get(position).getWidth());
-        holder.mTextView.setText(new SimpleDateFormat("yyyy/MM/dd").format(girlData.getPublishedAt()));
+        holder.mTextView.setText(isSavePicture?"":new SimpleDateFormat("yyyy/MM/dd").format(girlData.getPublishedAt()));
 
         //Log.i("zlTag",mList.get(position).getDesc() +  ",h:" + holder.mImageView.getHeight() + ",w:" +holder.mImageView.getWidth());
         holder.mImageView.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +121,10 @@ public class GirlRecyclerAdatper extends RecyclerView.Adapter<GirlRecyclerAdatpe
     public void addData(GirlData data){
         mList.add(data);
         notifyDataSetChanged();
+    }
+
+    public void setSavePicture(boolean is){
+        isSavePicture = is;
     }
 
     public void addDataList(List<GirlData> datas){

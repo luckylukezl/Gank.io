@@ -15,5 +15,6 @@ public class Constant {
     public static String SHARE_PATH = PATH + "/share";
     public static String SAVE_PATH = PATH + "/save";
 
+    public static String IMAGE_URL_END = "?imageView2/0/w/";
 
 }

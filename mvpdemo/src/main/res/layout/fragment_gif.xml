@@ -4,12 +4,19 @@
     android:layout_height="match_parent"
     android:background="@color/black">
 
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar_gif" />
+
     <ImageView
         android:id="@+id/imageView_gif"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/material_img"
+        android:scaleType="centerInside"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
 
     <TextView
         android:text="1/2"
@@ -19,5 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"/>
+
+
 
 </FrameLayout>
