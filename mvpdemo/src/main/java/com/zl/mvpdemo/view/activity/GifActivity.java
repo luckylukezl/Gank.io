@@ -8,7 +8,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.TextSwitcher;
 import android.widget.ViewSwitcher;
 
@@ -35,7 +38,7 @@ public class GifActivity extends AppCompatActivity {
 
     @BindView(R.id.viewPager_gif)
     ViewPager viewPagerGif;
-    @BindView(R.id.toolbar_view)
+    @BindView(R.id.toolbar_view_gif)
     Toolbar toolbarView;
     @BindView(R.id.textSwitcher_gif)
     TextSwitcher textSwitcherGif;
@@ -46,6 +49,8 @@ public class GifActivity extends AppCompatActivity {
     private List<String> mList;
     private int mPage;
     private String mDesc;
+
+    private boolean mIsHidden = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,12 +93,29 @@ public class GifActivity extends AppCompatActivity {
 
         mFragments = new ArrayList<>();
         for (int i = 0; i < mList.size(); i++) {
-            mFragments.add(GifFragment.newInstance((1 + i) + "/" + mList.size(), mList.get(i)));
+            GifFragment fragment = GifFragment.newInstance((1 + i) + "/" + mList.size(), mList.get(i));
+            fragment.setOnClicke(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    hideOrShowToolBar();
+                }
+            });
+            mFragments.add(fragment);
         }
         mPagerAdapter = new GifPagerAdapter(getSupportFragmentManager(), mFragments);
 
         viewPagerGif.setAdapter(mPagerAdapter);
         viewPagerGif.setCurrentItem(mPage);
+    }
+
+    public void hideOrShowToolBar(){
+        Log.i("zltag","" + mIsHidden);
+        toolbarView.animate()
+                .translationY(mIsHidden ? 0 : -toolbarView.getHeight())
+                .setInterpolator(new DecelerateInterpolator(2))
+                .start();
+        mIsHidden = !mIsHidden;
+
     }
 
 

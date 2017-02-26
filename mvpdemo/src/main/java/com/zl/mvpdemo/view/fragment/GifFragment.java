@@ -47,6 +47,7 @@ public class GifFragment extends BaseFragment {
 
     private Bitmap mBitmap;
     private PhotoViewAttacher mAttacher;
+    private View.OnClickListener mOnClickListener;
 
     public static GifFragment newInstance(String page, String url) {
         Bundle args = new Bundle();
@@ -72,11 +73,13 @@ public class GifFragment extends BaseFragment {
         Log.i("zlTag", mUrl);
 
         progressBarGif.setVisibility(View.VISIBLE);
+        //imageViewGif.setOnClickListener(mOnClickListener);
         Glide.with(mContext)
-                .load(mUrl + "?imageView2/0/w/" + Constant.SCREEN_WIDTH)
-                .thumbnail((float) 0.3)
+                .load(mUrl)// + "?imageView2/0/w/" + Constant.SCREEN_WIDTH)
+                //.thumbnail((float) 0.3)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 //.asBitmap()
+                .fitCenter()
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -105,5 +108,9 @@ public class GifFragment extends BaseFragment {
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         ButterKnife.bind(this, rootView);
         return rootView;
+    }
+
+    public void setOnClicke(View.OnClickListener listener){
+        mOnClickListener = listener;
     }
 }
