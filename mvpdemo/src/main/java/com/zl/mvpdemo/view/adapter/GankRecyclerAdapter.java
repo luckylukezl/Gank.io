@@ -39,6 +39,7 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
 
     private List<GankData> mList;
     private Context mContext;
+    private boolean isToady = false;
 
     public GankRecyclerAdapter(List<GankData> list, Context context) {
         mList = list;
@@ -56,10 +57,27 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
         final GankData gankData = mList.get(position);
         List<String> images = gankData.getImages();
 
-        String date = new SimpleDateFormat("yyyy-MM-dd").format(gankData.getPublishedAt());
-
         SpannableStringBuilder builder = new SpannableStringBuilder();
-        builder.append(StringStyles.format(mContext,date + "\n", R.style.DateTextAppearance));
+
+        if(isToady){
+            if(position == 0){
+                showCatogory(holder.category_day , gankData.getType());
+            }else{
+                boolean isFirstItemOfType = !mList.get(position - 1).getType()
+                        .equals(mList.get(position).getType());
+                if(isFirstItemOfType){
+                    showCatogory(holder.category_day , gankData.getType());
+                }else {
+                    hideCatogory(holder.category_day);
+
+                }
+            }
+        }else {
+            String date = new SimpleDateFormat("yyyy-MM-dd").format(gankData.getPublishedAt());
+            builder.append(StringStyles.format(mContext,date + "\n", R.style.DateTextAppearance));
+            hideCatogory(holder.category_day);
+        }
+
         builder.append(StringStyles.format(mContext,gankData.getDesc(),R.style.UrlTextAppearance));
         builder.append(StringStyles.format(mContext," (via." + gankData.getWho() + ") ", R.style.ViaTextAppearance));
 
@@ -122,6 +140,19 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
         });
     }
 
+    public void setIsToady(){
+        isToady = true;
+    }
+
+    private void showCatogory(TextView view,String type){
+        view.setText(type);
+        view.setVisibility(View.VISIBLE);
+    }
+
+    private void hideCatogory(TextView view){
+        view.setVisibility(View.GONE);
+    }
+
     @Override
     public int getItemCount() {
         return mList.size();
@@ -136,6 +167,8 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
 
         @BindView(R.id.gank_item_textView)
         TextView gankItemTextView;
+        @BindView(R.id.category_day)
+        TextView category_day;
 
         @BindView(R.id.imageView1_gank_item)
         GirlImageView imageView1GankItem;

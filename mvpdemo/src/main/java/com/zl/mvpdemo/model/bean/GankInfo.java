@@ -7,9 +7,9 @@ import java.util.List;
  */
 
 public class GankInfo<T> {
-    private boolean error;
+    protected boolean error;
 
-    private T results ;
+    protected T results ;
 
     public void setError(boolean error){
         this.error = error;

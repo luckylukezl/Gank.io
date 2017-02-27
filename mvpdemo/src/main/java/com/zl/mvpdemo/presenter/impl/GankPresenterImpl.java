@@ -30,6 +30,11 @@ public class GankPresenterImpl implements IGankPresenter , OnGankDataListener {
     }
 
     @Override
+    public void getDayDatas(String date) {
+        mModel.getDayData(this,date);
+    }
+
+    @Override
     public void onSuccess(List<GankData> gankDatas) {
         mView.setData(gankDatas);
     }

@@ -19,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class GankRetrofit {
 
-    private String mUrl = "http://gank.io/api/data/";
+    private String mUrl = "http://gank.io/api/";
 
     private static final int DEFAULT_TIMEOUT = 5;
 

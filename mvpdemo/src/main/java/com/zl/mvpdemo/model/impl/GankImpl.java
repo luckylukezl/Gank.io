@@ -6,13 +6,17 @@ import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.FutureTarget;
+import com.orhanobut.logger.Logger;
 import com.zl.mvpdemo.MyApplication;
+import com.zl.mvpdemo.model.bean.DayData;
+import com.zl.mvpdemo.model.bean.DayInfo;
 import com.zl.mvpdemo.model.bean.GankData;
 import com.zl.mvpdemo.model.bean.GankInfo;
 import com.zl.mvpdemo.model.bean.GirlData;
 import com.zl.mvpdemo.model.model.IGankModel;
 import com.zl.mvpdemo.model.service.GankRetrofit;
 import com.zl.mvpdemo.model.service.IGankioService;
+import com.zl.mvpdemo.presenter.listener.OnDataBaseListener;
 import com.zl.mvpdemo.presenter.listener.OnGankDataListener;
 
 import java.io.File;
@@ -95,5 +99,42 @@ public class GankImpl implements IGankModel {
                     }
                 });
 
+    }
+
+
+    @Override
+    public void getDayData(final OnGankDataListener listener, String date) {
+        IGankioService service = GankRetrofit.getGankRetrofit().getService();
+        Observable<DayInfo> observable = service.getDayData(date);
+
+        observable.subscribeOn(Schedulers.io())
+                .map(new DayDataFunc())
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        listener.onStart();
+                    }
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<GankData>>() {
+                    @Override
+                    public void onCompleted() {
+                        listener.onCompleted();
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        listener.onFailed();
+
+                    }
+
+                    @Override
+                    public void onNext(List<GankData> dayInfo) {
+                        listener.onSuccess(dayInfo);
+                        //Logger.d(dayInfo.size());
+                    }
+                });
     }
 }

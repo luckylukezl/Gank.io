@@ -148,7 +148,7 @@ public class AppBarActivity extends AppCompatActivity implements IView<GirlData>
                 startActivity(intent);
                 break;
             case R.id.action_home:
-
+                startActivity(new Intent(this, DayActivity.class));
                 break;
             case android.R.id.home:
                 drawerAppBar.openDrawer(GravityCompat.START);

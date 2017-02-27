@@ -73,6 +73,12 @@ public class GankFragment extends BaseLazyLoadFragment implements IView<List<Gan
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        lazyLoad();
+    }
+
     private void init(){
         mType = getArguments().getString(ARGS_TYPE);
 
@@ -84,7 +90,7 @@ public class GankFragment extends BaseLazyLoadFragment implements IView<List<Gan
 
         iniView();
         isPrepared = true;
-        lazyLoad();
+        //lazyLoad();
     }
 
     private void iniView() {
