@@ -15,7 +15,7 @@
 ## 展示
 <img src="/images/read.JPG" alt="images" title="images" height="486" />   <img src="/images/girls.JPG" alt="images" title="screenshot"  height="486" />
 
-<img src="/images/girl.JPG" alt="screenshot" title="images"  height="486" />   <img src="/images/gif.JPG" alt="images" title="images" height="486" />
+<img src="/images/girl.JPG" alt="screenshot" title="images"  height="486" />   <img src="/images/recommend.JPG" alt="images" title="images" height="486" />
 
 <img src="/images/menu.JPG" alt="images" title="images"  height="486" />   <img src="/images/webview.JPG" alt="images" title="screenshot"  height="486" />
 
