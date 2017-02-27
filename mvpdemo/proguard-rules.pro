@@ -49,7 +49,7 @@
     public *;
 }
 
--keep public class me.drakeet.meizhi.R$*{
+-keep public class com.zl.mvpdemo.R$*{
 		public static final int *;
 }
 
@@ -88,7 +88,7 @@
     native <methods>;
 }
 
--keep class me.drakeet.meizhi.** { *;}
+-keep class com.zl.mvpdemo.** { *;}
 
 -keepclasseswithmembernames class * {
     native <methods>;
@@ -164,7 +164,7 @@
    public <init>(org.json.JSONObject);
 }
 
--keep public class me.drakeet.meizhi.R$*{
+-keep public class com.zl.mvpdemo.R$*{
     public static final int *;
 }
 
