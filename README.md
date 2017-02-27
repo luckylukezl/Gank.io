@@ -16,11 +16,9 @@
 
 ## 展示
 
-<img src="/images/read.JPG" alt="images" title="images" width="360" height="640" />   <img src="/images/girls.JPG" alt="images" title="images"  width="360" height="640" />
+<img src="/images/read.JPG" alt="images" title="images" width="216" height="384" />   <img src="/images/girls.JPG" alt="images" title="images"   width="216" height="384" />   <img src="/images/girl.JPG" alt="screenshot" title="images"  width="216" height="384" />  
 
-<img src="/images/girl.JPG" alt="screenshot" title="images"  width="360" height="640" />   <img src="/images/recommend.jpg" alt="images" title="images" width="360" height="640" />
-
-<img src="/images/menu.JPG" alt="images" title="images"  width="360" height="640" />   <img src="/images/webview.JPG" alt="images" title="screenshot"  width="360" height="640" />
+<img src="/images/recommend.jpg" alt="images" title="images" width="216" height="384" />   <img src="/images/menu.JPG" alt="images" title="images"  width="216" height="384" />   <img src="/images/webview.JPG" alt="images" title="screenshot"  width="216" height="384" />
 
 
 ## 感谢
