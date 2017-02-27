@@ -12,12 +12,15 @@
 - 收藏功能（包括链接和图片）
 - 侧拉菜单
 - 浏览网页界面
+
+
 ## 展示
-<img src="/images/read.JPG" alt="images" title="images" height="486" />   <img src="/images/girls.JPG" alt="images" title="screenshot"  height="486" />
 
-<img src="/images/girl.JPG" alt="screenshot" title="images"  height="486" />   <img src="/images/recommend.jpg" alt="images" title="images" height="486" />
+<img src="/images/read.JPG" alt="images" title="images" width="360" height="640" />   <img src="/images/girls.JPG" alt="images" title="images"  width="360" height="640" />
 
-<img src="/images/menu.JPG" alt="images" title="images"  height="486" />   <img src="/images/webview.JPG" alt="images" title="screenshot"  height="486" />
+<img src="/images/girl.JPG" alt="screenshot" title="images"  width="360" height="640" />   <img src="/images/recommend.jpg" alt="images" title="images" width="360" height="640" />
+
+<img src="/images/menu.JPG" alt="images" title="images"  width="360" height="640" />   <img src="/images/webview.JPG" alt="images" title="screenshot"  width="360" height="640" />
 
 
 ## 感谢
