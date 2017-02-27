@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.orhanobut.logger.Logger;
 import com.zl.mvpdemo.R;
 import com.zl.mvpdemo.presenter.impl.ManagerPresenter;
 import com.zl.mvpdemo.presenter.presenter.IManagerPresenter;
@@ -93,6 +95,19 @@ public class GirlPictureActivity extends AppCompatActivity implements IView<Stri
 
         initView();
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_BACK:
+                    Logger.d("test");
+                   goBack();
+                    return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void initView() {

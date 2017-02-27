@@ -193,7 +193,6 @@ public class GirlFragment extends BaseFragment implements IGirlView{
 
         if(resultCode == 100){
             ArrayList<String> urls = data.getStringArrayListExtra(GirlPictureActivity.EXTRA_RESULT);
-            Log.i("zlTag", urls == null?"yes" : "no");
             Logger.d(urls);
             if(urls==null)return;
             for(String s:urls){

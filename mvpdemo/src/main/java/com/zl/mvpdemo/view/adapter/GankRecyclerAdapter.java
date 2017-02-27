@@ -78,18 +78,18 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
             holder.linearLayout_gank_item.setVisibility(View.VISIBLE);
             int i=0;
             holder.imageView1GankItem.setVisibility(View.VISIBLE);
-            loadImageView(images , i ,holder.imageView1GankItem);
+            loadImageView(images , i ,holder.imageView1GankItem, position);
             i++;
             if(i < images.size()){
                 holder.imageView2GankItem.setVisibility(View.VISIBLE);
-                loadImageView(images , i ,holder.imageView2GankItem);
+                loadImageView(images , i ,holder.imageView2GankItem, position);
             }else {
                 holder.imageView2GankItem.setVisibility(View.INVISIBLE);
             }
             i++;
             if(i < images.size()){
                 holder.imageView3GankItem.setVisibility(View.VISIBLE);
-                loadImageView(images , i ,holder.imageView3GankItem);
+                loadImageView(images , i ,holder.imageView3GankItem , position);
             }else {
                 holder.imageView3GankItem.setVisibility(View.INVISIBLE);
             }
@@ -99,7 +99,7 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
 
     }
 
-    public void loadImageView(final List<String> images , final int i , ImageView view){
+    public void loadImageView(final List<String> images , final int i , ImageView view , final int position){
 
         Glide.with(mContext)
                 .load(images.get(i) + "?imageView2/0/w/" + Constant.SCREEN_WIDTH / 3)
@@ -116,7 +116,7 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
                 Intent intent = new Intent(mContext , GifActivity.class);
                 intent.putExtra(GifActivity.EXTRA_LIST,new ArrayList<>(images));
                 intent.putExtra(GifActivity.EXTRA_PAGE,i);
-                intent.putExtra(GifActivity.EXTRA_DESC,mList.get(i).getDesc());
+                intent.putExtra(GifActivity.EXTRA_DESC,mList.get(position).getDesc());
                 mContext.startActivity(intent);
             }
         });

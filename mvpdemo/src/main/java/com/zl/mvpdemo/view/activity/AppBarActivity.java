@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -30,6 +31,8 @@ import com.zl.mvpdemo.view.fragment.TabFragment;
 import com.zl.mvpdemo.view.view.IView;
 import com.zl.mvpdemo.view.widget.GirlImageView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -116,6 +119,8 @@ public class AppBarActivity extends AppCompatActivity implements IView<GirlData>
         View view = navigationView.getHeaderView(0);
         imageViewDrawable = (GirlImageView) view.findViewById(R.id.imageView_header_navigation);
         imageViewDrawable.setPic(1,1);
+        TextView dateText = (TextView) view.findViewById(R.id.date_header_navigation);
+        dateText.setText(new SimpleDateFormat("yyyy/MM/dd").format(new Date()));
         mUtilPresenter.getLastPicture();
         //imageView.setImageResource(R.mipmap.material_img);
 
