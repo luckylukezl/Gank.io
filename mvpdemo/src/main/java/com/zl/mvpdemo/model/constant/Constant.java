@@ -2,6 +2,8 @@ package com.zl.mvpdemo.model.constant;
 
 import android.os.Environment;
 
+import java.util.Date;
+
 /**
  * Created by ZL on 2017/2/16.
  */
@@ -16,5 +18,7 @@ public class Constant {
     public static String SAVE_PATH = PATH + "/save";
 
     public static String IMAGE_URL_END = "?imageView2/0/w/";
+
+    public static Date DATE_TODAY = new Date();
 
 }

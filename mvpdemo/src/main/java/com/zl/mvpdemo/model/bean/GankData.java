@@ -1,5 +1,6 @@
 package com.zl.mvpdemo.model.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * Created by ZL on 2017/2/22.
  */
 
-public class GankData {
+public class GankData implements Serializable{
     private String _id;
 
     private String createdAt;

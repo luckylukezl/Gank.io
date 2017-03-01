@@ -19,9 +19,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.zl.mvpdemo.R;
+import com.zl.mvpdemo.model.bean.GankData;
+import com.zl.mvpdemo.presenter.impl.DBPresenter;
+import com.zl.mvpdemo.presenter.presenter.IDBPresenter;
 import com.zl.mvpdemo.view.widget.MarqueeTextView;
 
 import butterknife.BindView;
@@ -33,8 +37,9 @@ import butterknife.ButterKnife;
 
 public class WebViewActivity extends AppCompatActivity {
 
-    public static final String EXTRA_URL = "extra_url";
+    public static final String EXTRA_AUTHOR = "extra_author";
     public static final String EXTRA_TITLE = "extra_title";
+    public static final String EXTRA_GANK = "extra_gank";
 
     @BindView(R.id.web_webView)
     WebView webWebView;
@@ -47,6 +52,11 @@ public class WebViewActivity extends AppCompatActivity {
 
     private String mUrl;
     private String mTitle;
+    private GankData mGankData;
+
+    private boolean isAuthor = false; //显示作者web
+
+    private IDBPresenter<GankData> mDBPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,8 +69,12 @@ public class WebViewActivity extends AppCompatActivity {
     }
 
     private void init() {
-        mUrl = getIntent().getStringExtra(EXTRA_URL);
-        mTitle = getIntent().getStringExtra(EXTRA_TITLE);
+        mGankData = (GankData) getIntent().getSerializableExtra(EXTRA_GANK);
+        mUrl = mGankData.getUrl();
+        mTitle = mGankData.getDesc();
+        isAuthor = getIntent().getBooleanExtra(EXTRA_AUTHOR,false);
+
+        mDBPresenter = new DBPresenter(this);
 
         titleTextSwitcherWebView.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
@@ -119,7 +133,9 @@ public class WebViewActivity extends AppCompatActivity {
                 break;
             }
             case R.id.action_collect:{
-
+                if(isAuthor)break;
+                mDBPresenter.saveToDB(mGankData);
+                Toast.makeText(WebViewActivity.this,"已收藏",Toast.LENGTH_SHORT).show();
                 break;
             }
             default:

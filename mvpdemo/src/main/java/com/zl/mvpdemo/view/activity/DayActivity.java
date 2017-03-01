@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.zl.mvpdemo.R;
 import com.zl.mvpdemo.model.bean.GankData;
+import com.zl.mvpdemo.model.constant.Constant;
 import com.zl.mvpdemo.presenter.impl.GankPresenterImpl;
 import com.zl.mvpdemo.presenter.presenter.IGankPresenter;
 import com.zl.mvpdemo.view.adapter.GankRecyclerAdapter;
@@ -50,6 +51,7 @@ public class DayActivity extends AppCompatActivity implements IView<List<GankDat
 
     private IGankPresenter mPresenter;
     private String mToday;
+    private String mTitleDate;
     private List<GankData> mTodayDatas;
     private GankRecyclerAdapter mRecyclerAdapter;
 
@@ -66,8 +68,9 @@ public class DayActivity extends AppCompatActivity implements IView<List<GankDat
     }
 
     private void initView() {
+        getToday();
 
-        toolbarToady.setTitle("今日推荐");
+        toolbarToady.setTitle(mTitleDate + ":今日力推");
         //toolbarToady.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbarToady);
 
@@ -86,7 +89,7 @@ public class DayActivity extends AppCompatActivity implements IView<List<GankDat
     }
 
     public void initData() {
-        getToday();
+
         mPresenter = new GankPresenterImpl(this);
         mPresenter.getDayDatas(mToday);
 
@@ -101,7 +104,8 @@ public class DayActivity extends AppCompatActivity implements IView<List<GankDat
     }
 
     public void getToday() {
-        mToday = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
+        mToday = new SimpleDateFormat("yyyy/MM/dd").format(Constant.DATE_TODAY);
+        mTitleDate = new SimpleDateFormat("MM月dd日").format(Constant.DATE_TODAY);
     }
 
     @Override

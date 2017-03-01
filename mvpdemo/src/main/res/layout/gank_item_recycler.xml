@@ -17,6 +17,7 @@
         android:text="android"/>
 
     <LinearLayout
+        android:id="@+id/linearLayout_content_gank_item"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

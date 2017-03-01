@@ -1,7 +1,10 @@
 package com.zl.mvpdemo.view.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
@@ -19,6 +22,7 @@ import com.zl.mvpdemo.model.constant.Constant;
 import com.zl.mvpdemo.view.activity.GifActivity;
 import com.zl.mvpdemo.view.activity.GirlPictureActivity;
 import com.zl.mvpdemo.view.activity.WebViewActivity;
+import com.zl.mvpdemo.view.listener.OnSaveLongListener;
 import com.zl.mvpdemo.view.util.StringStyles;
 import com.zl.mvpdemo.view.widget.GirlImageView;
 
@@ -40,6 +44,9 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
     private List<GankData> mList;
     private Context mContext;
     private boolean isToady = false;
+    private boolean isSave = false; // 收藏
+
+    private OnSaveLongListener mOnSaveLongClickListener;
 
     public GankRecyclerAdapter(List<GankData> list, Context context) {
         mList = list;
@@ -59,7 +66,7 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
 
         SpannableStringBuilder builder = new SpannableStringBuilder();
 
-        if(isToady){
+        if(isToady || isSave){
             if(position == 0){
                 showCatogory(holder.category_day , gankData.getType());
             }else{
@@ -71,6 +78,29 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
                     hideCatogory(holder.category_day);
 
                 }
+            }
+
+            if(isSave){
+                String date = new SimpleDateFormat("yyyy-MM-dd").format(gankData.getPublishedAt());
+                builder.append(StringStyles.format(mContext,date + "\n", R.style.DateTextAppearance));
+                holder.linearLayout_content_gank_item.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        if(mOnSaveLongClickListener!=null){
+                            mOnSaveLongClickListener.OnLongClickListener(gankData);
+                        }
+                        return true;
+                    }
+                });
+                holder.gankItemTextView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        if(mOnSaveLongClickListener!=null){
+                            mOnSaveLongClickListener.OnLongClickListener(gankData);
+                        }
+                        return true;
+                    }
+                });
             }
         }else {
             String date = new SimpleDateFormat("yyyy-MM-dd").format(gankData.getPublishedAt());
@@ -86,13 +116,12 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext , WebViewActivity.class);
-                intent.putExtra(WebViewActivity.EXTRA_URL , gankData.getUrl());
-                intent.putExtra(WebViewActivity.EXTRA_TITLE,gankData.getDesc());
+                intent.putExtra(WebViewActivity.EXTRA_GANK,gankData);
                 mContext.startActivity(intent);
             }
         });
 
-        if(images!=null){
+        if(images!=null && images.size()>0){
             holder.linearLayout_gank_item.setVisibility(View.VISIBLE);
             int i=0;
             holder.imageView1GankItem.setVisibility(View.VISIBLE);
@@ -115,6 +144,10 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
             holder.linearLayout_gank_item.setVisibility(View.GONE);
         }
 
+    }
+
+    public void setOnLongClickListener(OnSaveLongListener listener){
+        mOnSaveLongClickListener = listener;
     }
 
     public void loadImageView(final List<String> images , final int i , ImageView view , final int position){
@@ -142,6 +175,10 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
 
     public void setIsToady(){
         isToady = true;
+    }
+
+    public void setIsSave(){
+        isSave = true;
     }
 
     private void showCatogory(TextView view,String type){
@@ -178,6 +215,8 @@ public class GankRecyclerAdapter extends RecyclerView.Adapter<GankRecyclerAdapte
         GirlImageView imageView3GankItem;
         @BindView(R.id.linearLayout_gank_item)
         LinearLayout linearLayout_gank_item;
+        @BindView(R.id.linearLayout_content_gank_item)
+        LinearLayout linearLayout_content_gank_item;
 
         public GankViewHolder(View itemView) {
             super(itemView);

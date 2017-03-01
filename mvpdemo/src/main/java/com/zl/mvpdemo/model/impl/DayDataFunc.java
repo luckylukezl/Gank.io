@@ -33,8 +33,10 @@ public class DayDataFunc implements Func1<DayInfo,List<GankData>> {
         if(category.contains("iOS"))gankDatas.addAll(dayInfo.getResults().getiOSList());
         if(category.contains("前端"))gankDatas.addAll(dayInfo.getResults().getWebList());
         if(category.contains("App"))gankDatas.addAll(dayInfo.getResults().getAppList());
+        if(category.contains("拓展资源"))gankDatas.addAll(dayInfo.getResults().getResList());
         if(category.contains("瞎推荐"))gankDatas.addAll(dayInfo.getResults().getRecommendList());
         if(category.contains("休息视频"))gankDatas.addAll(dayInfo.getResults().getMovieList());
+
 
         return gankDatas;
     }

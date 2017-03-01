@@ -183,3 +183,12 @@
     public static int v(...);
     public static int i(...);
 }
+
+
+-keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
+public static java.lang.String TABLENAME;
+}
+-keep class **$Properties
+
+# If you do not use SQLCipher:
+-dontwarn org.greenrobot.greendao.database.**

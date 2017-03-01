@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -18,10 +19,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.zl.mvpdemo.R;
+import com.zl.mvpdemo.model.bean.GankData;
 import com.zl.mvpdemo.model.bean.GirlData;
 import com.zl.mvpdemo.model.constant.Constant;
 import com.zl.mvpdemo.presenter.impl.UtilPresenterImpl;
@@ -82,7 +85,7 @@ public class AppBarActivity extends AppCompatActivity implements IView<GirlData>
         Constant.SCREEN_WIDTH = metrics.widthPixels;
         Constant.SCREEN_DENSITY = metrics.density;
 
-        toolbarMain.setTitle("Gank.io");
+        toolbarMain.setTitle("干货集中营");
         setSupportActionBar(toolbarMain);
 
         mUtilPresenter = new UtilPresenterImpl(this);
@@ -102,12 +105,25 @@ public class AppBarActivity extends AppCompatActivity implements IView<GirlData>
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         switch (menuItem.getItemId()){
                             case R.id.collect_drawer:
+                                startActivity(new Intent(AppBarActivity.this,SaveActivity.class));
 
                                 break;
                             case R.id.love_drawer:
                                 Intent intent = new Intent(AppBarActivity.this , GirlActivity.class);
                                 intent.putExtra(GirlActivity.EXTRA_ISSAVE,true);
                                 startActivity(intent);
+                                break;
+                            case R.id.settings_drawer:
+                                Toast.makeText(AppBarActivity.this,"敬请期待",Toast.LENGTH_SHORT).show();
+                                break;
+                            case R.id.about_drawer:
+                                GankData data = new GankData();
+                                data.setUrl("https://github.com/luckylukezl/Gank.io");
+                                data.setDesc("源码 github ，by zl");
+                                Intent intent1 = new Intent(AppBarActivity.this , WebViewActivity.class);
+                                intent1.putExtra(WebViewActivity.EXTRA_GANK,data);
+                                intent1.putExtra(WebViewActivity.EXTRA_AUTHOR,true);
+                                startActivity(intent1);
                                 break;
                         }
                         menuItem.setCheckable(false);
@@ -161,6 +177,7 @@ public class AppBarActivity extends AppCompatActivity implements IView<GirlData>
 
     @Override
     public void setData(GirlData girlData) {
+        Constant.DATE_TODAY = girlData.getPublishedAt();
         Glide.with(this)
                 .load(girlData.getUrl() + "?imageView2/0/w/" + Constant.SCREEN_WIDTH)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
