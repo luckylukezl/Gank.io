@@ -106,4 +106,10 @@ public class SaveActivity extends AppCompatActivity {
             }
         };
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDBPresenter.onDestory();
+    }
 }

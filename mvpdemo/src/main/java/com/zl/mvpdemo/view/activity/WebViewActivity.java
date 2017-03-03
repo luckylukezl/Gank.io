@@ -147,6 +147,7 @@ public class WebViewActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mDBPresenter.onDestory();
         if (webWebView != null) webWebView.destroy();
     }
 

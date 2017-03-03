@@ -11,4 +11,5 @@ public interface IDBPresenter<T> {
     void getDatas(List<T> t);
     void getData(T t);
     void deleteData(T t);
+    void onDestory();
 }

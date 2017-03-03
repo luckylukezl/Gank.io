@@ -63,6 +63,11 @@ public class DBPresenter implements IDBPresenter<GankData> {
         dbManager.deleteGankData(gankData.getUrl());
     }
 
+    @Override
+    public void onDestory() {
+        mContext = null;
+    }
+
     private void toDB(GankData gankData , GankDataDB dataDB , List<ImagesDB> imagesDBs){
         int image_id = (int) System.currentTimeMillis();
 
