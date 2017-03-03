@@ -34,6 +34,7 @@ import rx.schedulers.Schedulers;
 public class IGirlImpl implements IGirlModel {
 
     private static int PIC_WIDTH = Constant.SCREEN_WIDTH / 2;
+    private Subscriber<List<GirlData>> mSubscriber;
 
     @Override
     public void getGirls(final OnGirlListener listener , int page) {
@@ -48,6 +49,27 @@ public class IGirlImpl implements IGirlModel {
 
         IGankioService service = retrofit.getService();
         Observable<GankInfo<List<GirlData>>> observable = service.getGirls(count,page);
+
+        mSubscriber = new Subscriber<List<GirlData>>() {
+            @Override
+            public void onCompleted() {
+                listener.onCompleted();
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                listener.onFailed();
+
+            }
+
+            @Override
+            public void onNext(List<GirlData> girlDatas) {
+                listener.onSuccess(girlDatas);
+                Log.i("zlTag","size" + girlDatas.size());
+            }
+
+        };
 
         observable.map(new GirlDataFunc<List<GirlData>>())
                 .subscribeOn(Schedulers.io())
@@ -85,26 +107,12 @@ public class IGirlImpl implements IGirlModel {
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<GirlData>>() {
-                    @Override
-                    public void onCompleted() {
-                        listener.onCompleted();
+                .subscribe(mSubscriber);
+    }
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        listener.onFailed();
-
-                    }
-
-                    @Override
-                    public void onNext(List<GirlData> girlDatas) {
-                        listener.onSuccess(girlDatas);
-                        Log.i("zlTag","size" + girlDatas.size());
-                    }
-
-                });
+    @Override
+    public void onDestory() {
+        mSubscriber.unsubscribe();
     }
 
 

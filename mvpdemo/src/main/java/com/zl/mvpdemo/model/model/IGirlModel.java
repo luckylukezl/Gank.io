@@ -9,4 +9,5 @@ import com.zl.mvpdemo.presenter.listener.OnGirlListener;
 public interface IGirlModel {
     void getGirls(OnGirlListener listener, int page);
     void getGirls(OnGirlListener listener, int count , int page);
+    void onDestory();
 }

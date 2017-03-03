@@ -207,6 +207,12 @@ public class GirlFragment extends BaseFragment implements IGirlView{
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mGirlPresenter.onDestory();
+    }
+
+    @Override
     public void setGirlInfo(List<GirlData> datas) {
         //Log.i("zlTag",girlInfo.getResults().get(0).getType() + "");
         //mGirlAdapter.addDataList(datas);

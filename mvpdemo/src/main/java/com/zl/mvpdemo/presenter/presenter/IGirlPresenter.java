@@ -8,4 +8,5 @@ public interface IGirlPresenter {
     void getGirls(int page);
     void getGirlsFromLoc(int page);
     void init();
+    void onDestory();
 }

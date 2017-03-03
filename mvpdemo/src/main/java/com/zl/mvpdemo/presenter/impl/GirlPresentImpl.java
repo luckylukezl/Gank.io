@@ -74,6 +74,11 @@ public class GirlPresentImpl implements IGirlPresenter , OnGirlListener {
     }
 
     @Override
+    public void onDestory() {
+        mGirlModel.onDestory();
+    }
+
+    @Override
     public void onSuccess(List<GirlData> datas) {
         //获取到了girlInfo，缓存图片
 //        for(GirlData girlData: info.getResults()){

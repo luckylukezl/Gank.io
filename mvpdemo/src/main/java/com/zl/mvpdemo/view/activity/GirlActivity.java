@@ -78,4 +78,5 @@ public class GirlActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         mGirlFragment.onActivityResult(requestCode,resultCode,data);
     }
+
 }
