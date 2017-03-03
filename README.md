@@ -1,6 +1,7 @@
 ## Gank.io
 基于 干货集中营 API 文档 编写
 
+ 下载 ：https://fir.im/luckyzl
 - 架构：MVP
 - 依赖库：RxJava，Retrofit，Glide，OkHttp，Material Design，ButterKnife，GreenDao，Logger
 
