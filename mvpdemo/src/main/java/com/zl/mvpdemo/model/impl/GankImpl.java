@@ -36,10 +36,32 @@ import rx.schedulers.Schedulers;
 
 public class GankImpl implements IGankModel {
 
+    private Subscriber<List<GankData>> mSubscriber;
+
     @Override
     public void getGankData(final OnGankDataListener listener , String type, int page) {
         IGankioService service = GankRetrofit.getGankRetrofit().getService();
         Observable<GankInfo<List<GankData>>> observable = service.getGankData(type , 10 , page);
+
+        mSubscriber = new Subscriber<List<GankData>>() {
+            @Override
+            public void onCompleted() {
+                listener.onCompleted();
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                listener.onFailed();
+                Log.i("zlTag","error:" + e.toString());
+            }
+
+            @Override
+            public void onNext(List<GankData> gankDatas) {
+                Log.i("zlTag" , "size:" + gankDatas.size());
+                listener.onSuccess(gankDatas);
+            }
+        };
 
         observable.map(new GirlDataFunc<List<GankData>>())
                 .subscribeOn(Schedulers.io())
@@ -79,25 +101,7 @@ public class GankImpl implements IGankModel {
 //                    }
 //                })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<GankData>>() {
-                    @Override
-                    public void onCompleted() {
-                        listener.onCompleted();
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        listener.onFailed();
-                        Log.i("zlTag","error:" + e.toString());
-                    }
-
-                    @Override
-                    public void onNext(List<GankData> gankDatas) {
-                        Log.i("zlTag" , "size:" + gankDatas.size());
-                        listener.onSuccess(gankDatas);
-                    }
-                });
+                .subscribe(mSubscriber);
 
     }
 
@@ -106,6 +110,26 @@ public class GankImpl implements IGankModel {
     public void getDayData(final OnGankDataListener listener, String date) {
         IGankioService service = GankRetrofit.getGankRetrofit().getService();
         Observable<DayInfo> observable = service.getDayData(date);
+
+        mSubscriber = new Subscriber<List<GankData>>() {
+            @Override
+            public void onCompleted() {
+                listener.onCompleted();
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                listener.onFailed();
+
+            }
+
+            @Override
+            public void onNext(List<GankData> dayInfo) {
+                listener.onSuccess(dayInfo);
+                //Logger.d(dayInfo.size());
+            }
+        };
 
         observable.subscribeOn(Schedulers.io())
                 .map(new DayDataFunc())
@@ -117,24 +141,13 @@ public class GankImpl implements IGankModel {
                 })
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<GankData>>() {
-                    @Override
-                    public void onCompleted() {
-                        listener.onCompleted();
+                .subscribe(mSubscriber);
+    }
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        listener.onFailed();
-
-                    }
-
-                    @Override
-                    public void onNext(List<GankData> dayInfo) {
-                        listener.onSuccess(dayInfo);
-                        //Logger.d(dayInfo.size());
-                    }
-                });
+    @Override
+    public void onDestory() {
+        if(mSubscriber != null){
+            mSubscriber.unsubscribe();
+        }
     }
 }

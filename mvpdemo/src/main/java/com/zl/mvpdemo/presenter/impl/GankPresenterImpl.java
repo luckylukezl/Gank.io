@@ -39,6 +39,11 @@ public class GankPresenterImpl implements IGankPresenter , OnGankDataListener {
     }
 
     @Override
+    public void onDestory() {
+        mModel.onDestory();
+    }
+
+    @Override
     public void onSuccess(List<GankData> gankDatas) {
         mView.setData(gankDatas);
     }

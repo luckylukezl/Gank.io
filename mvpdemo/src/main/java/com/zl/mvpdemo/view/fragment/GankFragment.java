@@ -1,11 +1,13 @@
 package com.zl.mvpdemo.view.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.zl.mvpdemo.R;
 import com.zl.mvpdemo.model.bean.GankData;
@@ -74,8 +76,8 @@ public class GankFragment extends BaseLazyLoadFragment implements IView<List<Gan
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         lazyLoad();
     }
 
@@ -91,6 +93,12 @@ public class GankFragment extends BaseLazyLoadFragment implements IView<List<Gan
         iniView();
         isPrepared = true;
         //lazyLoad();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.onDestory();
     }
 
     private void iniView() {
@@ -170,6 +178,7 @@ public class GankFragment extends BaseLazyLoadFragment implements IView<List<Gan
         gankSwipeRefresh.setRefreshing(false);
         mRefreshListener.onCompleted();
     }
+
 
     @Override
     public void showError() {

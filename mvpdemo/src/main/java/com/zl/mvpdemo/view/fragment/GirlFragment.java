@@ -22,12 +22,15 @@ import com.zl.mvpdemo.R;
 import com.zl.mvpdemo.model.bean.GirlData;
 import com.zl.mvpdemo.model.bean.GirlPicture;
 import com.zl.mvpdemo.presenter.impl.GirlPresentImpl;
+import com.zl.mvpdemo.presenter.impl.UtilPresenterImpl;
 import com.zl.mvpdemo.presenter.presenter.IGirlPresenter;
+import com.zl.mvpdemo.presenter.presenter.UtilPresenter;
 import com.zl.mvpdemo.view.activity.GirlPictureActivity;
 import com.zl.mvpdemo.view.adapter.GirlRecyclerAdatper;
 import com.zl.mvpdemo.view.listener.OnGirlTouchListener;
 import com.zl.mvpdemo.view.listener.RecyclerRefreshListener;
 import com.zl.mvpdemo.view.view.IGirlView;
+import com.zl.mvpdemo.view.view.IView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +53,7 @@ public class GirlFragment extends BaseFragment implements IGirlView{
     FloatingActionButton mFloatingActionButton;
 
     private IGirlPresenter mGirlPresenter;
+    private UtilPresenter mUtilPresenter;
     private GirlRecyclerAdatper mGirlAdapter;
     private List<GirlData> mGirlUrl;
     private List<GirlData> mNewDatas;
@@ -57,6 +61,7 @@ public class GirlFragment extends BaseFragment implements IGirlView{
     private RecyclerRefreshListener mRefreshListener;
 
     private boolean isSavedPicture = false;
+    private boolean isRefresh = false;
 
     public static GirlFragment newInstance(boolean isSave){
 
@@ -84,6 +89,7 @@ public class GirlFragment extends BaseFragment implements IGirlView{
         mGirlAdapter.setGirlTouchListener(getOnGirlTouchListener());
 
         mGirlPresenter = new GirlPresentImpl(this);
+        initUtilPresenter();
 
         mGirlPresenter.init();
 
@@ -94,7 +100,35 @@ public class GirlFragment extends BaseFragment implements IGirlView{
         initData();
     }
 
+    private void initUtilPresenter() {
+        mUtilPresenter = new UtilPresenterImpl(new IView<GirlData>() {
+            @Override
+            public void setData(GirlData girlData) {
+                GirlData last = mGirlUrl.get(0);
+                if(!last.get_id().equals(girlData.get_id())){
+                    mGirlUrl.add(0,last);
+                    mGirlAdapter.notifyDataSetChanged();
+                }
+            }
 
+            @Override
+            public void showLoading() {
+                mRefreshListener.onStart();
+                mGirlSwipeRefresh.setRefreshing(true);
+            }
+
+            @Override
+            public void getDataCompleted() {
+                mGirlSwipeRefresh.setRefreshing(false);
+                mRefreshListener.setLoading(false);
+            }
+
+            @Override
+            public void showError() {
+
+            }
+        });
+    }
 
 
     private void iniView() {
@@ -106,8 +140,7 @@ public class GirlFragment extends BaseFragment implements IGirlView{
             @Override
             public void onRefresh() {
                 if(!isLoading()){
-                    getData(1);
-
+                    mUtilPresenter.getLastPicture();
                 }
             }
 
@@ -150,9 +183,7 @@ public class GirlFragment extends BaseFragment implements IGirlView{
     }
 
     public void getData(int page){
-        if(page == 1){
-            mGirlUrl.clear();
-        }
+
         mRefreshListener.setCurrentPage(page);
         if(isSavedPicture){
             mGirlPresenter.getGirlsFromLoc(page);
@@ -214,8 +245,11 @@ public class GirlFragment extends BaseFragment implements IGirlView{
 
     @Override
     public void setGirlInfo(List<GirlData> datas) {
-        //Log.i("zlTag",girlInfo.getResults().get(0).getType() + "");
-        //mGirlAdapter.addDataList(datas);
+
+        if(isRefresh){
+            mGirlUrl.clear();
+        }
+
         if(mRefreshListener.getIsScrolling()){
             mNewDatas.addAll(datas);
         }else{

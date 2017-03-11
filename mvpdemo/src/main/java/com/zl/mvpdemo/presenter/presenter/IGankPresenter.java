@@ -7,4 +7,5 @@ package com.zl.mvpdemo.presenter.presenter;
 public interface IGankPresenter {
     void getData(String type , int page);
     void getDayDatas(String date);
+    void onDestory();
 }

@@ -51,11 +51,11 @@ public class UtilPresenterImpl implements UtilPresenter , OnGirlListener{
 
     @Override
     public void onStart() {
-
+        mView.showLoading();
     }
 
     @Override
     public void onCompleted() {
-
+        mView.getDataCompleted();
     }
 }

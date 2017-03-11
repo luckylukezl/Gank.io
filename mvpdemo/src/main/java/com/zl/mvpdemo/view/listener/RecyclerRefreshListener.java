@@ -93,6 +93,10 @@ public abstract class RecyclerRefreshListener extends
         return isLoading;
     }
 
+    public void setLoading(boolean is){
+        isLoading = is;
+    }
+
     public void setCurrentPage(int page){
         currentPage = page;
     }
