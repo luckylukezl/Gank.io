@@ -21,4 +21,7 @@ public class Constant {
 
     public static Date DATE_TODAY = new Date();
 
+    public static String NEW_PREFERENCE = "new_preference";
+    public static String FIRST_CHECK_PREFERENCE = "first check preference";
+
 }

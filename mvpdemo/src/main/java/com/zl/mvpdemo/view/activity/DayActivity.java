@@ -1,5 +1,6 @@
 package com.zl.mvpdemo.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -8,6 +9,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -83,9 +85,22 @@ public class DayActivity extends AppCompatActivity implements IView<List<GankDat
         toolbarToady.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                goBack();
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            goBack();
+        }
+        return true;
+    }
+
+    private void goBack(){
+        startActivity(new Intent(DayActivity.this,AppBarActivity.class));
+        this.finish();
     }
 
     public void initData() {

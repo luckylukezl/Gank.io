@@ -3,8 +3,9 @@ package com.zl.mvpdemo.model.impl;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.zl.mvpdemo.model.bean.dao.DaoMaster;
-import com.zl.mvpdemo.model.bean.dao.DaoSession;
+import com.zl.mvpdemo.MyApplication;
+import com.zl.mvpdemo.model.bean.dao.gankDataDb.DaoMaster;
+import com.zl.mvpdemo.model.bean.dao.gankDataDb.DaoSession;
 import com.zl.mvpdemo.model.bean.dao.gankDataDb.GankDataDB;
 import com.zl.mvpdemo.model.bean.dao.gankDataDb.GankDataDBDao;
 import com.zl.mvpdemo.model.bean.dao.imagesDB.ImagesDB;
@@ -24,16 +25,16 @@ public class DBManager {
     private Context mContext;
     private  DaoMaster.DevOpenHelper openHelper;
 
-    private DBManager(Context context){
-        mContext = context;
+    private DBManager(){
+        mContext = MyApplication.getAppContext();
         openHelper = new DaoMaster.DevOpenHelper(mContext,dbName,null);
     }
 
-    public static DBManager getInstance(Context context){
+    public static DBManager getInstance(){
         if(mDBManager == null){
             synchronized (DBManager.class){
                 if(mDBManager == null){
-                    mDBManager = new DBManager(context);
+                    mDBManager = new DBManager();
                 }
             }
         }

@@ -112,7 +112,10 @@ public class IGirlImpl implements IGirlModel {
 
     @Override
     public void onDestory() {
-        mSubscriber.unsubscribe();
+        if(mSubscriber!=null){
+            mSubscriber.unsubscribe();
+        }
+
     }
 
 

@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,6 +63,8 @@ public class AppBarActivity extends AppCompatActivity implements IView<GirlData>
 
     private GirlImageView imageViewDrawable;
 
+    private long mQuiteTime = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,13 +80,6 @@ public class AppBarActivity extends AppCompatActivity implements IView<GirlData>
 
 
     private void init() {
-
-        //获取屏幕尺寸
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        Constant.SCREEN_HEIGHT = metrics.heightPixels;
-        Constant.SCREEN_WIDTH = metrics.widthPixels;
-        Constant.SCREEN_DENSITY = metrics.density;
 
         toolbarMain.setTitle("干货集中营");
         setSupportActionBar(toolbarMain);
@@ -176,8 +172,26 @@ public class AppBarActivity extends AppCompatActivity implements IView<GirlData>
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode){
+            case KeyEvent.KEYCODE_BACK:{
+                if(System.currentTimeMillis() - mQuiteTime < 2000){
+                    finish();
+                    //System.exit(0);
+
+                }else {
+                    mQuiteTime = System.currentTimeMillis();
+                    Toast.makeText(AppBarActivity.this,"再按一次退出",Toast.LENGTH_SHORT).show();
+                }
+                break;
+            }
+        }
+        return true;
+    }
+
+    @Override
     public void setData(GirlData girlData) {
-        Constant.DATE_TODAY = girlData.getPublishedAt();
+        //Constant.DATE_TODAY = girlData.getPublishedAt();
         Glide.with(this)
                 .load(girlData.getUrl() + "?imageView2/0/w/" + Constant.SCREEN_WIDTH)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)

@@ -31,7 +31,7 @@ public class DBPresenter implements IDBPresenter<GankData> {
         List<ImagesDB> imagesDBs = new ArrayList<>();
         toDB(gankData , gankDataDB , imagesDBs);
 
-        DBManager dbManager = DBManager.getInstance(mContext);
+        DBManager dbManager = DBManager.getInstance();
         dbManager.insertGankData(gankDataDB);
         dbManager.insertGankDataList(imagesDBs);
     }
@@ -39,7 +39,7 @@ public class DBPresenter implements IDBPresenter<GankData> {
     @Override
     public void getDatas(List<GankData> gankDatas) {
         if(gankDatas == null)gankDatas = new ArrayList<>();
-        DBManager dbManager = DBManager.getInstance(mContext);
+        DBManager dbManager = DBManager.getInstance();
         List<GankDataDB> gankDataDBList = dbManager.queryGankDataList();
         for(GankDataDB gankDataDB : gankDataDBList){
             List<ImagesDB> imagesDBs =  dbManager.queryImageList(gankDataDB.getImage_id());
@@ -59,7 +59,7 @@ public class DBPresenter implements IDBPresenter<GankData> {
 
     @Override
     public void deleteData(GankData gankData) {
-        DBManager dbManager = DBManager.getInstance(mContext);
+        DBManager dbManager = DBManager.getInstance();
         dbManager.deleteGankData(gankData.getUrl());
     }
 
