@@ -108,11 +108,13 @@ public class GankFragment extends BaseLazyLoadFragment implements IView<List<Gan
             @Override
             public void onRefresh() {
                 if(!isLoading()){
-                    mGankDatas.clear();
-                    Log.i("zlTag","refresh");
-                    getDate(1);
-                    setCurrentPage(1);
+                    //mGankDatas.clear();
+                    //Log.i("zlTag","refresh");
+                    //getDate(1);
+                    //setCurrentPage(1);
                 }
+                gankSwipeRefresh.setRefreshing(false);
+
             }
 
             @Override

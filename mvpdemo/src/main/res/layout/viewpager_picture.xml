@@ -10,4 +10,16 @@
         android:layout_centerInParent="true"
         android:id="@+id/picture_imageView" />
 
+    <ProgressBar
+        android:id="@+id/progressBar_imageView"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="154dp"
+        android:layout_marginStart="154dp"
+        android:layout_marginTop="233dp" />
+
 </RelativeLayout>

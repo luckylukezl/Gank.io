@@ -39,9 +39,9 @@ public class GankImpl implements IGankModel {
     private Subscriber<List<GankData>> mSubscriber;
 
     @Override
-    public void getGankData(final OnGankDataListener listener , String type, int page) {
+    public void getGankData(final OnGankDataListener listener, String type, int count, int page) {
         IGankioService service = GankRetrofit.getGankRetrofit().getService();
-        Observable<GankInfo<List<GankData>>> observable = service.getGankData(type , 10 , page);
+        Observable<GankInfo<List<GankData>>> observable = service.getGankData(type , count , page);
 
         mSubscriber = new Subscriber<List<GankData>>() {
             @Override
@@ -72,37 +72,13 @@ public class GankImpl implements IGankModel {
                     }
                 })
                 .subscribeOn(AndroidSchedulers.mainThread())
-//                .observeOn(Schedulers.io())
-//                .map(new Func1<List<GankData>, List<GankData>>() {
-//                    @Override
-//                    public List<GankData> call(List<GankData> datas) {
-//                        for(GankData data:datas){
-//                            List<String> list = data.getImages();
-//                            if(list == null)continue;
-//                            for(String s:list){
-//                                FutureTarget future = Glide.with(MyApplication.getAppContext())
-//                                        .load(s)
-//                                        .downloadOnly(500, 500);
-//                                try {
-//                                    File file = (File) future.get();
-//                                    Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-//                                    Log.i("zlTag" , s + ":"  + bitmap.getWidth() + "h" + bitmap.getHeight());
-//
-//                                } catch (InterruptedException e) {
-//                                    e.printStackTrace();
-//                                } catch (ExecutionException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//
-//                        }
-//
-//                        return datas;
-//                    }
-//                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mSubscriber);
+    }
 
+    @Override
+    public void getGankData(final OnGankDataListener listener , String type, int page) {
+        getGankData(listener,type,10,page);
     }
 
 

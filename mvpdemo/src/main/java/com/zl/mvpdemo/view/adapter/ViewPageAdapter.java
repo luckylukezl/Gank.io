@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -23,7 +24,9 @@ import com.bumptech.glide.request.target.Target;
 import com.zl.mvpdemo.R;
 import com.zl.mvpdemo.model.constant.Constant;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -36,7 +39,7 @@ public class ViewPageAdapter extends PagerAdapter {
 
     private Context context;
     private List<String> images;
-    private SparseArray<View> cacheView;
+    private LinkedHashMap<Integer , View> cacheView;
     private ViewGroup containerTemp;
 
     private boolean isDateChanged = false;
@@ -46,7 +49,19 @@ public class ViewPageAdapter extends PagerAdapter {
     public ViewPageAdapter(Context context, List<String> images) {
         this.context = context;
         this.images = images;
-        cacheView = new SparseArray<>(images.size());
+        //cacheView = new SparseArray<>(images.size());
+        cacheView = new LinkedHashMap<Integer, View>(16,0.75f,true){
+            private static final long serialVersionUID = -265165988291842485L;
+            private int mSize = 10; // 最多存储10个view
+            @Override
+            protected boolean removeEldestEntry(Entry<Integer, View> eldest) {
+                if(size() > mSize){
+                    return true;
+                }else {
+                    return false;
+                }
+            }
+        };
     }
 
     @Override
@@ -59,6 +74,7 @@ public class ViewPageAdapter extends PagerAdapter {
             view = LayoutInflater.from(context).inflate(R.layout.viewpager_picture, container, false);
             view.setTag(position);
             final ImageView image = (ImageView) view.findViewById(R.id.picture_imageView);
+            final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar_imageView);
             final PhotoViewAttacher photoViewAttacher = new PhotoViewAttacher(image);
 
             Glide.with(context)
@@ -73,6 +89,7 @@ public class ViewPageAdapter extends PagerAdapter {
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
                             image.setImageDrawable(resource);
                             photoViewAttacher.update();
+                            progressBar.setVisibility(View.GONE);
                         }
                     });
 

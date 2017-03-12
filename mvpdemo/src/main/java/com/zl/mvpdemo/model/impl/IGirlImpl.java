@@ -81,31 +81,31 @@ public class IGirlImpl implements IGirlModel {
                 })
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(Schedulers.io())
-                .map(new Func1<List<GirlData>, List<GirlData>>() {
-                    @Override
-                    public List<GirlData> call(List<GirlData> datas) {
-                        for(GirlData data:datas){
-                            final String url = data.getUrl() + "?imageView2/0/w/" + PIC_WIDTH;
-                            FutureTarget future = Glide.with(MyApplication.getAppContext())
-                                    .load(url)
-                                    .downloadOnly(500, 500);
-                            try {
-                                File file = (File) future.get();
-                                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                                data.setHeight(bitmap.getHeight());
-                                data.setWidth(bitmap.getWidth());
-                                //Log.i("zlTag" , data.getHeight() + "h" + data.getWidth());
-
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            } catch (ExecutionException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        return datas;
-                    }
-                })
+//                .map(new Func1<List<GirlData>, List<GirlData>>() {
+//                    @Override
+//                    public List<GirlData> call(List<GirlData> datas) {
+//                        for(GirlData data:datas){
+//                            final String url = data.getUrl() + "?imageView2/0/w/" + PIC_WIDTH;
+//                            FutureTarget future = Glide.with(MyApplication.getAppContext())
+//                                    .load(url)
+//                                    .downloadOnly(500, 500);
+//                            try {
+//                                File file = (File) future.get();
+//                                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+//                                data.setHeight(bitmap.getHeight());
+//                                data.setWidth(bitmap.getWidth());
+//                                //Log.i("zlTag" , data.getHeight() + "h" + data.getWidth());
+//
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            } catch (ExecutionException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//
+//                        return datas;
+//                    }
+//                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mSubscriber);
     }

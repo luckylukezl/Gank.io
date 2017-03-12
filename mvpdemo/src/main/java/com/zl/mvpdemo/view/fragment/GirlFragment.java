@@ -139,8 +139,12 @@ public class GirlFragment extends BaseFragment implements IGirlView{
         mRefreshListener = new RecyclerRefreshListener(layoutManager) {
             @Override
             public void onRefresh() {
-                if(!isLoading()){
+                if(!isLoading() && !isSavedPicture){
                     mUtilPresenter.getLastPicture();
+                }
+
+                if(isSavedPicture){
+                    mGirlSwipeRefresh.setRefreshing(false);
                 }
             }
 

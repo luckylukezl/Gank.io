@@ -12,6 +12,7 @@ import java.util.List;
  */
 
 public interface IGankModel {
+    void getGankData(OnGankDataListener listener , String type ,int count, int page);
     void getGankData(OnGankDataListener listener , String type , int page);
     void getDayData(OnGankDataListener listener, String date);
     void onDestory();

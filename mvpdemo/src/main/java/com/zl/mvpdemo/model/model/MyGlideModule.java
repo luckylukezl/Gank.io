@@ -25,8 +25,10 @@ public class MyGlideModule implements GlideModule {
                 public DiskCache build() {
                     File file = new File(context.getExternalCacheDir() ,
                             "girl_cache");
-                    file.mkdirs();
-                    Log.i("zlTag",file.getAbsolutePath());
+                    if(!file.exists()){
+                        file.mkdirs();
+                    }
+                    //Log.i("zlTag",file.getAbsolutePath());
                     return DiskLruCacheWrapper.get(file,1024 * 1024 * 100);
                 }
             });
